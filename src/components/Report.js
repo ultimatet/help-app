@@ -13,7 +13,7 @@ const Report = ({ answers, questions, resetDemo }) => {
     <div className="report">
       <h2>Your Death Literacy Report</h2>
       <p>
-        Total Score: {scores.total} ({scores.percentage}%)
+        Total Score: {scores.total} / {scores.maxScore} ({scores.percentage}%)
       </p>
       <h3>Category Scores:</h3>
       <ul>

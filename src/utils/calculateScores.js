@@ -20,5 +20,6 @@ export const calculateScores = (answers, questions) => {
     total: totalScore,
     percentage: percentageScore,
     categories: categoryScores,
+    maxScore: maxPossibleScore, 
   };
 };

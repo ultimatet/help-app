@@ -9,7 +9,8 @@ const Quiz = () => {
   const [showReport, setShowReport] = useState(false);
 
   const handleAnswer = (questionId, score) => {
-    setAnswers({ ...answers, [questionId]: { score } });
+    // Keep a copy of the answers array then update the answers object with the new answer
+    setAnswers({ ...answers, [questionId]: { score } }); 
 
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
@@ -34,9 +35,7 @@ const Quiz = () => {
             {questions[currentQuestion].options.map((option) => (
               <button
                 key={option.id}
-                className={`option-button ${
-                  answers[questions[currentQuestion].id]?.score === option.score ? "selected" : ""
-                }`}
+                className={`option-button ${answers[questions[currentQuestion].id]?.score === option.score ? "selected" : ""}`}
                 onClick={() => handleAnswer(questions[currentQuestion].id, option.score)}
               >
                 {option.text}
