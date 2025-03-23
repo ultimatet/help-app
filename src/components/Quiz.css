@@ -57,3 +57,11 @@
     transform: translateY(0);
 }
 
+.back-button {
+    padding: 10px 20px;
+    margin-top: 1.5rem;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}

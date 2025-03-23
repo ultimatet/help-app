@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import questions from "../utils/questions";
 import Report from "./Report";
 import "./Quiz.css";
@@ -8,6 +9,7 @@ const Quiz = () => {
   const [answers, setAnswers] = useState({});
   const [showReport, setShowReport] = useState(false);
 
+  const navigate = useNavigate();
   const handleAnswer = (questionId, score) => {
     // Keep a copy of the answers array then update the answers object with the new answer
     setAnswers({ ...answers, [questionId]: { score } }); 
@@ -43,6 +45,7 @@ const Quiz = () => {
             ))}
             
           </div>
+          <button className="back-button" onClick={() => navigate('/')}>Back</button>
         </>
       )}
     </div>
