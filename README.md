@@ -4,6 +4,12 @@
 
 The Death Literacy Platform is an online space designed to improve individuals' knowledge, skills, and capacity to engage with death, dying, and bereavement in a meaningful and informed manner. Our platform provides accessible, structured, and interactive resources that enable users to engage with these topics in a supportive digital environment.
 
+## Tech Stack
+- **React** for frontend
+- **Node.js / Express.js** for API
+- **PostgeSQL** for Database management
+- **AuthO** for authentication
+
 ## Core Features
 
 - **Death Literacy Assessment**: A questionnaire that helps users understand their current level of death literacy across key dimensions
