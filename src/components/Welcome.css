@@ -1,8 +1,8 @@
 .welcome-card {
   width: 100%;
   max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
+  margin: 2rem auto;
+  padding: 2rem;
   border: 1px solid #ccc;
   border-radius: 8px;
   background-color: #fff;
