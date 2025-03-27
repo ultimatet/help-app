@@ -8,7 +8,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import './App.css';
 
 function App() {
-  const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
+  const { isAuthenticated } = useAuth0();
 
   return (
     <div className="App">
@@ -17,31 +17,27 @@ function App() {
         <Routes>
           <Route path="/" element={<Welcome />} />
 
-          {/* Login and Register are handled via Auth0 */}
-          <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <button onClick={() => loginWithRedirect()}>Login</button>} />
-          <Route path="/register" element={isAuthenticated ? <Navigate to="/" /> : <button onClick={() => loginWithRedirect()}>Register</button>} />
-
           {/* Protected Route */}
-          <Route path="/quiz" element={isAuthenticated ? <Quiz /> : <Navigate to="/login" />} />
+          <Route path="/quiz" element={isAuthenticated ? <Quiz /> : <Navigate to="/" />} />
 
           {/* Catch-all route */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
 
         {/* Logout Button */}
-        {isAuthenticated && (
+        {/* {isAuthenticated && (
           <button onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}>
             Logout
           </button>
-        )}
+        )} */}
 
         {/* Show user info if logged in */}
-        {isAuthenticated && user && (
+        {/* {isAuthenticated && user && (
           <div>
             <p>Welcome, {user.name}</p>
             <p>Email: {user.email}</p>
           </div>
-        )}
+        )} */}
       </div>
       <Footer />
     </div>
