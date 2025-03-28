@@ -1,0 +1,49 @@
+.container {
+    width: 100%;
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    text-align: center;
+}
+
+.welcome-text {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.link-btn {
+    margin: 10px auto;
+    font-size: 16px;
+    color: #007bff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+    display: inline-block;
+}
+
+.link-btn:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn {
+    margin: 10px auto;
+    font-size: 16px;
+    color: #007bff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn:hover {
+    background-color: #007bff;
+    color: #fff;
+}
