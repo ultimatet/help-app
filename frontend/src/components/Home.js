@@ -1,5 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Home.css";
 
 const LogoutButton = () => {
@@ -14,20 +15,11 @@ const LogoutButton = () => {
         )}
         <h1>Take quiz</h1>
         <p>Click the button below to start the quiz</p>
-        <button onClick={() => window.location.replace("/quiz")} className="btn">Start Quiz</button>
+        <Link to="/quiz" className="link-btn">Start Quiz</Link>
         <h1>Logout</h1>
-        <button 
-            className="btn"
-            onClick={() =>
-            logout({
-                returnTo: window.location.origin,
-            })
-            }
-        >
-            Log Out
+        <button className="btn" onClick={() => logout({ returnTo: window.location.origin})}>
+          Log Out
         </button>
-        {/* Show user info if logged in */}
-        
     </div>
   );
 };

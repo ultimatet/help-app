@@ -15,6 +15,23 @@
     margin-bottom: 15px;
 }
 
+.link-btn {
+    margin: 10px auto;
+    font-size: 16px;
+    color: #007bff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+    display: inline-block;
+}
+
+.link-btn:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
 .btn {
     margin: 10px auto;
     font-size: 16px;
