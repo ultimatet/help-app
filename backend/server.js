@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const { expressjwt: jwt } = require("express-jwt");
 const jwksRsa = require("jwks-rsa");
-const { sequelize } = require("./models"); // Import sequelize instance
+const { sequelize } = require("./models");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -22,6 +22,16 @@ const checkJwt = jwt({
   audience: process.env.AUTH0_AUDIENCE,
   issuer: `https://${process.env.AUTH0_DOMAIN}/`,
   algorithms: ["RS256"]
+});
+
+app.use((err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    console.error('Invalid JWT:', err);
+    // Log error details:
+    console.error('Error Type:', err.code);
+    console.error('Error Message:', err.message);
+  }
+  next(err);
 });
 
 // Routes
