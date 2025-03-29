@@ -1,8 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const { expressjwt: jwt } = require("express-jwt");
 const jwksRsa = require("jwks-rsa");
+const { expressjwt: jwt } = require("express-jwt");
 const { sequelize } = require("./models");
 
 const app = express();
