@@ -14,8 +14,7 @@ root.render(
     authorizationParams={{redirect_uri: window.location.origin, scope: "openid profile email"}}
     
 > 
-  <BrowserRouter>
-    
+  <BrowserRouter>   
     <App />
   </BrowserRouter>
 </Auth0Provider>

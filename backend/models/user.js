@@ -7,16 +7,16 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    email: {
+    auth0_email: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
     },
-    google_id: {
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    result: {
       type: DataTypes.STRING,
       allowNull: true,
     },

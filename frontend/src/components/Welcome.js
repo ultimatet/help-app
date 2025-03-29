@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import './Welcome.css';
 
 function Welcome() {
-  const { loginWithRedirect } = useAuth0();
+  const { loginWithRedirect, error } = useAuth0();
+
+  useEffect(() => {
+    if (error) {
+      console.error('Auth0 Error:', error);
+    }
+  }, [error]);
 
   const handleLogin = () => {
     loginWithRedirect({
