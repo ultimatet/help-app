@@ -6,6 +6,10 @@ import "./Home.css";
 const LogoutButton = () => {
   const { isAuthenticated, user, logout } = useAuth0();
 
+  const handleLogout = () => {
+    logout({ returnTo: "https://funeral-quiz.vercel.app" });
+  }
+
   return (
     <div className="container">
         {isAuthenticated && user && (
@@ -20,7 +24,7 @@ const LogoutButton = () => {
         <p>Click the button below to view your report</p> 
         <Link to="/report" className="link-btn">View Report</Link> {/* Fix this link later  */}
         <h1>Logout</h1>
-        <button className="btn" onClick={() => logout({ returnTo: window.location.origin})}>
+        <button className="btn" onClick={handleLogout}>
           Log Out
         </button>  
     </div>
