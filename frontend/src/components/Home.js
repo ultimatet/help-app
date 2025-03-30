@@ -7,7 +7,9 @@ const LogoutButton = () => {
   const { isAuthenticated, user, logout } = useAuth0();
 
   const handleLogout = () => {
-    logout({ returnTo: "https://funeral-quiz.vercel.app" });
+    logout({ logoutParams: { 
+        returnTo: window.location.origin
+      } });
   }
 
   return (
@@ -22,7 +24,7 @@ const LogoutButton = () => {
         <Link to="/quiz" className="link-btn">Start Quiz</Link>
         <h1>View Report</h1>
         <p>Click the button below to view your report</p> 
-        <Link to="/report" className="link-btn">View Report</Link> {/* Fix this link later  */}
+        <Link to="/report" className="link-btn">View Report</Link>
         <h1>Logout</h1>
         <button className="btn" onClick={handleLogout}>
           Log Out
