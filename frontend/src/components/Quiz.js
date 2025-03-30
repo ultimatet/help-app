@@ -20,16 +20,11 @@ const Quiz = () => {
       setShowReport(true);
     }
   };
-  const resetDemo = () => {
-    setAnswers({});
-    setCurrentQuestion(0);
-    setShowReport(false); 
-  };
 
   return (
     <div className="quiz">
       {showReport ? (
-        <Report answers={answers} questions={questions} resetDemo={resetDemo} />
+        <Report answers={answers} questions={questions} />
       ) : (
         <>
           <h2>{questions[currentQuestion].text}</h2>

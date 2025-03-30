@@ -23,6 +23,10 @@
     margin-bottom: 1.5rem;
 }
 
+.category-scores ul {
+    list-style-type: none;
+}
+
 .report ul li {
     margin-bottom: 0.5rem;
 }
@@ -40,6 +44,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
     text-align: center;
+    text-decoration: none;
 }
 
 .reset:hover {
