@@ -1,8 +1,8 @@
 .header {
-    /* background-color: transparent; */
-    background-color: black;
-    color: rgb(255, 255, 255);
-    padding: 3rem 1rem 3rem 3rem;
+    background-color: transparent;
+    color: #ffffff;
+    padding: 0;
+    margin: 0;
     display: flex;
     justify-content: space-between;
     align-items: baseline;
@@ -14,12 +14,27 @@
 }
 
 .header a {
-    color: #61dafb;
+    color: #000000;
     text-decoration: none;
 }
 
 .header a:hover {
     text-decoration: underline;
+}
+
+.nav {
+    position: fixed;
+    /* Makes navbar stick to top */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    /* Ensures nav stays above hero */
+    padding: 1rem;
+    /* Remove background color or make it transparent */
+    background-color: transparent;
+    /* Optional: add a slight blur for better readability */
+    backdrop-filter: blur(5px);
 }
 
 .nav-list {
@@ -42,3 +57,82 @@
 .nav-list li {
     display: inline;
 }
+
+.hero {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    margin-top: 0;
+    z-index: 10;
+    /* Below navbar */
+}
+
+.hero img {
+    width: 100vw;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.user-icon {
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.user-icon img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/*sign-in popup*/
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.popup-content h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: black;
+}
+
+.popup-content button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.popup-content .close-btn {
+    background-color: red;
+    color: white;
+    margin-top: 1.5rem;
+}
+
+.popup-content .close-btn:hover {
+    background-color: darkred;
+}
+

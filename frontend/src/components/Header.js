@@ -23,10 +23,8 @@ const handleLogout = () => {
 
   return (
     <header className="header">
-      <div className="header-left">
-        <h1>HELP</h1>
-      </div>
       <div className="header-right">
+        <h1>HELP</h1>
         <nav className="nav">
           <ul className="nav-list">
             <li><Link to="/">About Death Literacy</Link></li>
@@ -34,9 +32,16 @@ const handleLogout = () => {
             <li><Link to="/resource">Resource & Support</Link></li> 
             <li><Link to="/org">For Organisations</Link></li>
             <li><Link to="/contact">Contact Us</Link></li>
-            <li><button onClick={() => setPopup(true)}>Sign-In</button></li>
+            <li>
+              <button className='user-icon' onClick={() => setPopup(!popup)}>
+                <img alt='user' src='/pic/person.png'/>
+              </button>
+            </li>
           </ul>
         </nav>
+        <div className="hero">
+          <img src="/pic/bud-hold.jpg" alt="Hero" className="hero-image" />
+        </div>
       </div>
       {popup && (
         <div className="popup-overlay">
