@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import './Header.css';
@@ -6,6 +6,19 @@ import './Header.css';
 const Header = () => {
 const [popup, setPopup] = useState(false);
 const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
+const [scrolled, setScrolled] = useState(false);
+
+useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 10;
+      if (isScrolled !== scrolled) {
+        setScrolled(isScrolled);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [scrolled]);
 
 const handleLogin = () => {
     loginWithRedirect({
@@ -14,6 +27,15 @@ const handleLogin = () => {
       }
     });
 };
+
+const handleRegister = () => {
+    loginWithRedirect({
+      authorizationParams: {
+        screen_hint: 'signup',
+        redirect_uri: window.location.origin
+      }
+    });
+  };
 
 const handleLogout = () => {
     logout({
@@ -24,8 +46,7 @@ const handleLogout = () => {
   return (
     <header className="header">
       <div className="header-right">
-        <h1>HELP</h1>
-        <nav className="nav">
+        <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
           <ul className="nav-list">
             <li><Link to="/">About Death Literacy</Link></li>
             <li><Link to="/quiz">Take the assessment</Link></li>
@@ -55,6 +76,9 @@ const handleLogout = () => {
               <>
                 <h2>Sign In</h2>
                 <button onClick={handleLogin}>Sign In</button>
+                <h2>Sign Up</h2>
+                <p>Don't have an account? Create one now!</p>
+                <button onClick={handleRegister}>Sign Up</button>
               </>
             )}
             <button className="close-btn" onClick={() => setPopup(false)}>Close</button>

@@ -3,8 +3,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./Home.css";
 
-const LogoutButton = () => {
-  const { isAuthenticated, user, logout } = useAuth0();
+const Home = () => {
+  const { isAuthenticated, user } = useAuth0();
 
   return (
     <div className="container">
@@ -12,19 +12,32 @@ const LogoutButton = () => {
           <div>
             <p className="welcome-text">Welcome, {user.name}</p>
           </div>
-        )}
-        <h1>Take quiz</h1>
-        <p>Click the button below to start the quiz</p>
-        <Link to="/quiz" className="link-btn">Start Quiz</Link>
-        <h1>View Report</h1>
-        <p>Click the button below to view your report</p> 
-        <Link to="/report" className="link-btn">View Report</Link> {/* Fix this link later  */}
-        <h1>Logout</h1>
-        <button className="btn" onClick={() => logout({ returnTo: window.location.origin})}>
-          Log Out
-        </button>  
+          
+        )} 
+      <div className="home-content">
+        <h1>Welcome to the Death Literacy Assessment</h1>
+        <p>Take the quiz to assess your death literacy.</p>
+        <Link to="/quiz" className="btn btn-primary">Take the Assessment</Link>
+        </div>
+        <div className="card-container">
+          <div className="card">
+            <h2>About Death Literacy</h2>
+            <p>Learn about the importance of death literacy and how it can help you and your loved ones.</p>
+            <Link to="/about" className="btn btn-secondary">Learn More</Link>
+          </div>
+          <div className="card">
+            <h2>Resources & Support</h2>
+            <p>Find resources and support for end-of-life planning.</p>
+            <Link to="/resource" className="btn btn-secondary">Explore Resources</Link>
+          </div>
+          <div className="card">
+            <h2>For Organisations</h2>
+            <p>Discover how organisations can promote death literacy.</p>
+            <Link to="/org" className="btn btn-secondary">Get Involved</Link>
+          </div>
+        </div>
     </div>
   );
 };
 
-export default LogoutButton;
+export default Home;
