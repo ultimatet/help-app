@@ -45,23 +45,25 @@ const handleLogout = () => {
 
   return (
     <header className="header">
-      <div className="header-right">
         <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
+
+          <h1 id='logo'>HELP.</h1>
+
           <ul className="nav-list">
             <li><Link to="/">About Death Literacy</Link></li>
             <li><Link to="/quiz">Take the assessment</Link></li>
             <li><Link to="/resource">Resource & Support</Link></li> 
             <li><Link to="/org">For Organisations</Link></li>
             <li><Link to="/contact">Contact Us</Link></li>
-            <li>
-              <button className='user-icon' onClick={() => setPopup(!popup)}>
-                <img alt='user' src='/pic/person.png'/>
-              </button>
-            </li>
           </ul>
+          <button className='user-icon' onClick={() => setPopup(!popup)}>
+              <img alt='user' src='/pic/person.png'/>
+            </button>
         </nav>
         <div className="hero">
           <img src="/pic/bud-hold.jpg" alt="Hero" className="hero-image" />
+          <div className="hero-text">
+            <h1>Be informed. Be prepared.</h1>
         </div>
       </div>
       {popup && (

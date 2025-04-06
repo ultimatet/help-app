@@ -1,41 +1,31 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import React from "react";
+import { useInView } from "react-intersection-observer";
 import { Link } from "react-router-dom";
 import "./Home.css";
 
 const Home = () => {
-  const { isAuthenticated, user } = useAuth0();
+const { ref: ref1, inView: inView1 } = useInView({ threshold: 0.2 });
+const { ref: ref2, inView: inView2 } = useInView({ threshold: 0.2 });
+const { ref: ref3, inView: inView3 } = useInView({ threshold: 0.2 });
 
   return (
     <div className="container">
-        {isAuthenticated && user && (
-          <div>
-            <p className="welcome-text">Welcome, {user.name}</p>
-          </div>
-          
-        )} 
-      <div className="home-content">
-        <h1>Welcome to the Death Literacy Assessment</h1>
-        <p>Take the quiz to assess your death literacy.</p>
-        <Link to="/quiz" className="btn btn-primary">Take the Assessment</Link>
-        </div>
-        <div className="card-container">
-          <div className="card">
-            <h2>About Death Literacy</h2>
-            <p>Learn about the importance of death literacy and how it can help you and your loved ones.</p>
-            <Link to="/about" className="btn btn-secondary">Learn More</Link>
-          </div>
-          <div className="card">
-            <h2>Resources & Support</h2>
-            <p>Find resources and support for end-of-life planning.</p>
-            <Link to="/resource" className="btn btn-secondary">Explore Resources</Link>
-          </div>
-          <div className="card">
-            <h2>For Organisations</h2>
-            <p>Discover how organisations can promote death literacy.</p>
-            <Link to="/org" className="btn btn-secondary">Get Involved</Link>
-          </div>
-        </div>
+      <div className="section-container" >
+        <div className={`section ${inView1 ? 'in-view' : ''}`} ref={ref1} id="about">
+          <h2>About Us</h2>
+          <p>Learn about the team.</p>
+          <Link to="/about" className="btn btn-secondary">About HELP.</Link>
+        </div> <hr/>
+        <div className={`section ${inView2 ? 'in-view' : ''}`} ref={ref2} id="resource">
+          <p>Find resources and support for end-of-life planning.</p>
+          <Link to="/resource" className="btn btn-secondary">Explore Resources</Link>
+        </div> <hr/>
+        <div className={`section ${inView3 ? 'in-view' : ''}`} ref={ref3} id="org">
+          <h2>For Organisations</h2>
+          <p>Discover how organisations can promote death literacy.</p>
+          <Link to="/org" className="btn btn-secondary">Get Involved</Link>
+        </div> <hr/>
+      </div>
     </div>
   );
 };
