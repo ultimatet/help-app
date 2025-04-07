@@ -1,11 +1,27 @@
+/* *{
+  border: 2px solid #ccc;
+  margin:0;
+} */
 .container {
     width: 100%;
     max-width: 800px;
-    margin:  auto;
+    margin: 0;
     padding: 3rem;
     border-radius: 8px;   
     text-align: center;
     z-index: 60;
+}
+
+.home-container {
+    width: 100%;
+    margin: 0 auto; /* Ensures horizontal centering */
+    padding: 3rem;
+    border-radius: 8px;
+    text-align: center;
+    z-index: 60;
+    display: flex; /* Use flexbox for centering */
+    flex-direction: column;
+    align-items: center; /* Centers content horizontally */
 }
 
 .home-content {
@@ -18,12 +34,13 @@
 
 hr {
   border: 0;
-  height: 1px;
+  height: 5px;
   background-color: #ccc;
   width: 60%;
   margin: 40px auto;
 }
 
+/*section*/
 .section-container {
   display: flex;
   flex-wrap: wrap;
@@ -36,14 +53,14 @@ hr {
   border: 1px solid #ccc;
   background-color: #f8f4e9;
   width: 100%;
-  height: 80vh;
+  max-width: 800px; /* Adjusted from 500px */
   text-align: center;
-  margin: 0 auto;
-  padding: 10vh;
+  align-items: center;
+  margin: auto ;
+  padding: 30px;
   opacity: 0;
   transform: translateY(20px);
   transition: all 700ms ease;
-  margin: 0 auto;
 }
 .section.in-view {
   opacity: 1;
@@ -67,6 +84,8 @@ hr {
   padding: 10px 15px;
   border-radius: 5px;
   display: inline-block;
+  width: 50%;
+  align-self: center;
 }
 .section .btn:hover {
   background-color: #6b8c7d;
@@ -76,3 +95,33 @@ hr {
 .section .btn-secondary {
   background-color: #b38a6d;
 }
+
+#about {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  border-radius: 8px;
+  margin: 50px auto 0;  
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center; 
+  width: 100%;
+  max-width: none;
+  height: auto;
+  text-align: center;
+  gap: 10vh;
+}
+
+#about img {
+  width: 100%;
+  height: auto;
+  max-width: 40%;
+  min-width: 300px;
+  border-radius: 8px;
+  margin: 20px 0; /* Add spacing around the image */
+  transform: rotateZ(2deg);
+}
+
+
+

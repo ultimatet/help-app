@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import './Header.css';
 
@@ -7,10 +7,12 @@ const Header = () => {
 const [popup, setPopup] = useState(false);
 const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
 const [scrolled, setScrolled] = useState(false);
+const location = useLocation();
+
 
 useEffect(() => {
     const handleScroll = () => {
-      const isScrolled = window.scrollY > 10;
+      const isScrolled = window.scrollY > 15;
       if (isScrolled !== scrolled) {
         setScrolled(isScrolled);
       }
@@ -19,6 +21,33 @@ useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [scrolled]);
+
+useEffect(() => {
+    let isAnimating = false;
+    let timeout;
+    const handleWheel = (e) => {
+    if (location.pathname !== '/home' || window.scrollY !== 0 || isAnimating || e.deltaY <= 0) return;
+
+    e.preventDefault();
+    isAnimating = true;
+
+    // Only allow downward scroll (positive deltaY)
+    if (e.deltaY > 0) {
+      window.scrollBy({
+        top: window.innerHeight,
+        behavior: 'smooth'
+      });
+    }
+
+
+    timeout = setTimeout(() => {
+      isAnimating = false;
+    }, 300); // Matches scroll duration
+  };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    return () => window.removeEventListener('wheel', handleWheel);
+  }, [location.pathname]);  
 
 const handleLogin = () => {
     loginWithRedirect({
@@ -47,10 +76,10 @@ const handleLogout = () => {
     <header className="header">
         <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
 
-          <h1 id='logo'>HELP.</h1>
+          <h1 id='logo'><Link to="/">HELP.</Link></h1>  
 
           <ul className="nav-list">
-            <li><Link to="/">About Death Literacy</Link></li>
+            <li><Link to="/about">About Death Literacy</Link></li>
             <li><Link to="/quiz">Take the assessment</Link></li>
             <li><Link to="/resource">Resource & Support</Link></li> 
             <li><Link to="/org">For Organisations</Link></li>
@@ -61,7 +90,7 @@ const handleLogout = () => {
             </button>
         </nav>
         <div className="hero">
-          <img src="/pic/bud-hold.jpg" alt="Hero" className="hero-image" />
+          <img src="/pic/hero-plant.png" alt="Hero" className="hero-image" />
           <div className="hero-text">
             <h1>Be informed. Be prepared.</h1>
         </div>

@@ -18,10 +18,6 @@
     text-decoration: none;
 }
 
-.header a:hover {
-    text-decoration: underline;
-}
-
 .nav {
     position: fixed;
     top: 0;
@@ -34,10 +30,13 @@
     display: flex;
     justify-content: space-between;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+    transition: all 0.3s ease;
 }
 .nav.scrolled {
     background-color: #88a096dd;
-    transition: background-color 0.3s ease;
+
+    padding: 0.1rem 1rem;
 }
 
 .nav-list {
@@ -49,6 +48,7 @@
     justify-content: flex-end;
     align-items: center;
     position: relative;
+    transition: padding 0.3s ease;
 }
 
 .nav-list::after {
@@ -57,8 +57,17 @@
     bottom: 20px;
     left: 0;
     width: 100%;
-    height: 3px;
+    height: 2px;
     background: white;
+    transition: all 0.3s ease;
+}
+
+.nav.scrolled .nav-list {
+    padding: 15px 0 10px 0;
+}
+.nav.scrolled .nav-list::after {
+    opacity: 0;
+    height: 0;
 
 }
 
@@ -77,26 +86,29 @@
     text-align: right;
 }
 
-.nav-list li {
-    display: inline-block;
+
+.nav-list li:hover {
+    transform: scale(1.1);
+    cursor: pointer;
 }
 
 
 #logo {
-    font-size: 5vh;
-    font-weight: bold;
+    font-size: 7vh;
+    font-weight: 250;
     text-align: left;
     align-self: start;
     margin-right: auto;
     text-decoration: none;
     padding-left: 2rem;
+    padding-top: 0.2rem;
 }
 
 .user-icon {
     background: transparent;
     border: none;
     padding: 0;
-    margin-right: .5rem;
+    margin-right: 1rem;
     margin-left: 1.2rem;
     align-items: center;
     
@@ -109,7 +121,7 @@
 
 .user-icon img {
     display: block;
-    width: 100%;
+    width: 90%;
     height: auto;
 }
 
@@ -164,16 +176,17 @@
 
 
 .hero {
-    position: relative;
+    position: static;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: 60vh;
-    margin-top: 0;
+    height: 100vh;
+    margin: 0;
     z-index: 50;
-    /* Below navbar */
 }
 
 .hero img {
-    width: 100vw;
+    width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
