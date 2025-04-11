@@ -12,7 +12,7 @@ const location = useLocation();
 
 useEffect(() => {
     const handleScroll = () => {
-      const isScrolled = window.scrollY > 15;
+      const isScrolled = window.scrollY > 10;
       if (isScrolled !== scrolled) {
         setScrolled(isScrolled);
       }
@@ -22,32 +22,32 @@ useEffect(() => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [scrolled]);
 
-useEffect(() => {
-    let isAnimating = false;
-    let timeout;
-    const handleWheel = (e) => {
-    if (location.pathname !== '/home' || window.scrollY !== 0 || isAnimating || e.deltaY <= 0) return;
+// useEffect(() => {
+//     let isAnimating = false;
+//     let timeout;
+//     const handleWheel = (e) => {
+//     if (location.pathname !== '/home' || window.scrollY !== 0 || isAnimating || e.deltaY <= 0) return;
 
-    e.preventDefault();
-    isAnimating = true;
+//     e.preventDefault();
+//     isAnimating = true;
 
-    // Only allow downward scroll (positive deltaY)
-    if (e.deltaY > 0) {
-      window.scrollBy({
-        top: window.innerHeight,
-        behavior: 'smooth'
-      });
-    }
+//     // Only allow downward scroll (positive deltaY)
+//     if (e.deltaY > 0) {
+//       window.scrollBy({
+//         top: window.innerHeight,
+//         behavior: 'smooth'
+//       });
+//     }
 
 
-    timeout = setTimeout(() => {
-      isAnimating = false;
-    }, 300); // Matches scroll duration
-  };
+//     timeout = setTimeout(() => {
+//       isAnimating = false;
+//     }, 300); // Matches scroll duration
+//   };
 
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    return () => window.removeEventListener('wheel', handleWheel);
-  }, [location.pathname]);  
+//     window.addEventListener('wheel', handleWheel, { passive: false });
+//     return () => window.removeEventListener('wheel', handleWheel);
+//   }, [location.pathname]);  
 
 const handleLogin = () => {
     loginWithRedirect({
@@ -70,7 +70,7 @@ const handleLogout = () => {
     logout({
       returnTo: window.location.origin
     });
-}
+};
 
   return (
     <header className="header">
