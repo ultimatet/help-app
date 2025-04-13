@@ -1,49 +1,185 @@
+/* *{
+  border: 2px solid #ccc;
+  margin:0;
+} */
 .container {
     width: 100%;
     max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #fff;
+    margin: 0;
+    padding: 3rem;
+    border-radius: 8px;   
     text-align: center;
+    z-index: 60;
 }
 
-.welcome-text {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 15px;
+.home-container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 3rem 0;
+    border-radius: 8px;
+    text-align: center;
+    z-index: 60;
+    display: flex; /* Use flexbox for centering */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-.link-btn {
-    margin: 10px auto;
-    font-size: 16px;
-    color: #007bff;
-    text-decoration: none;
-    padding: 10px 20px;
-    border: 1px solid #007bff;
-    border-radius: 4px;
-    transition: background-color 0.3s, color 0.3s;
-    display: inline-block;
+.home-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
 }
 
-.link-btn:hover {
-    background-color: #007bff;
-    color: #fff;
+
+/*section*/
+.section-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin: 0 auto;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
 }
 
-.btn {
-    margin: 10px auto;
-    font-size: 16px;
-    color: #007bff;
-    text-decoration: none;
-    padding: 10px 20px;
-    border: 1px solid #007bff;
-    border-radius: 4px;
-    transition: background-color 0.3s, color 0.3s;
+.section-container h1 {
+  font-size: 2.5rem;
+  text-align: center;
+  color: #5a6d7a;
 }
 
-.btn:hover {
-    background-color: #007bff;
-    color: #fff;
+.section {
+  border: 1px solid #ccc;
+  background-color: #f8f4e9;
+  width: 100%;
+  max-width: 800px; /* Adjusted from 500px */
+  text-align: center;
+  align-items: center;
+  margin: 5rem auto;
+  padding: 30px 0;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 700ms ease;
 }
+.section.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.section p {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+}
+
+.section .btn {
+  text-decoration: none;
+  color: white;
+  background-color: #b38a6d;
+  padding: 10px 15px;
+  border-radius: 5px;
+  display: inline-block;
+  width: 50%;
+  align-self: center;
+}
+.section .btn:hover {
+  background-color: #6b8c7d;
+  cursor: pointer;
+}
+
+#about {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  border-radius: 8px;
+  margin: -1rem auto;  
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center; 
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+  text-align: center;
+  gap: 10vh;
+}
+
+#about img {
+  width: 100%;
+  height: auto;
+  max-width: 40%;
+  min-width: 300px;
+  border-radius: 8px;
+  margin: 20px 0; /* Add spacing around the image */
+  transform: rotateZ(2deg);
+}
+
+#resource {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  border-radius: 8px; 
+  justify-content: space-between;
+  align-items: center; 
+  width: 100%;
+  max-width: none;
+  height: auto;
+  text-align: center;
+}
+
+#resource .card-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: none; 
+  gap: 12px; 
+  margin: auto; 
+}
+
+#resource .card {
+  background-color: #f8f4e9;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px;
+  width: 100%;
+  height: 520px;
+  max-width: 300px; /* Adjusted from 200px */
+  text-align: center;
+}
+
+#resource .card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+}
+
+#resource .card img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 10px; /* Space between image and text */
+}
+
+#quiz {
+  border: none;
+  padding: 30px 0;
+  border-radius: 8px; 
+  justify-content: space-between;
+  align-items: center; 
+  width: 100%;
+  max-width: none;
+  height: auto;
+  text-align: center;
+}
+
