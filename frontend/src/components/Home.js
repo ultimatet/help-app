@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./Home.css";
 
-const LogoutButton = () => {
+const Home = () => {
   const { isAuthenticated, user, logout } = useAuth0();
 
   const handleLogout = () => {
@@ -33,4 +33,4 @@ const LogoutButton = () => {
   );
 };
 
-export default LogoutButton;
+export default Home;
