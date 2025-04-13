@@ -32,7 +32,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/quiz" element={isAuthenticated ? <Quiz /> : <Navigate to="/home" replace />} />
           <Route path="*" element={<Navigate to="/home" replace />} />
-        </Routes>
+Routes        </Routes>
 
         
       </div>
