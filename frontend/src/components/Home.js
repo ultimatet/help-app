@@ -8,6 +8,12 @@ const { ref: ref1, inView: inView1 } = useInView({ threshold: 0.2 });
 const { ref: ref2, inView: inView2 } = useInView({ threshold: 0.2 });
 const { ref: ref3, inView: inView3 } = useInView({ threshold: 0.2 });
 
+  const handleLogout = () => {
+    logout({ logoutParams: { 
+        returnTo: window.location.origin
+      } });
+  }
+
   return (
     <div className="home-container">
       <div className="home-content">
@@ -64,7 +70,6 @@ const { ref: ref3, inView: inView3 } = useInView({ threshold: 0.2 });
           </section>
         </div>
       </div>
-      
     </div>
   );
 };
