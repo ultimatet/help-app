@@ -5,9 +5,9 @@ import "./Header.css";
 
 const Header = () => {
     const [popup, setPopup] = useState(false);
-    const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
+    const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
     const [scrolled, setScrolled] = useState(false);
-    // const location = useLocation();
+    const location = useLocation();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -21,31 +21,31 @@ const Header = () => {
         return () => window.removeEventListener("scroll", handleScroll);
     }, [scrolled]);
 
-    // useEffect(() => {
-    //     let isAnimating = false;
-    //     let timeout;
-    //     const handleWheel = (e) => {
-    //     if (location.pathname !== '/home' || window.scrollY !== 0 || isAnimating || e.deltaY <= 0) return;
+    useEffect(() => {
+        let isAnimating = false;
+        let timeout;
+        const handleWheel = (e) => {
+        if (location.pathname !== '/home' || window.scrollY !== 0 || isAnimating || e.deltaY <= 0) return;
 
-    //     e.preventDefault();
-    //     isAnimating = true;
+        e.preventDefault();
+        isAnimating = true;
 
-    //     // Only allow downward scroll (positive deltaY)
-    //     if (e.deltaY > 0) {
-    //       window.scrollBy({
-    //         top: window.innerHeight,
-    //         behavior: 'smooth'
-    //       });
-    //     }
+        // Only allow downward scroll (positive deltaY)
+        if (e.deltaY > 0) {
+          window.scrollBy({
+            top: window.innerHeight * 0.95,
+            behavior: 'smooth'
+          });
+        }
 
-    //     timeout = setTimeout(() => {
-    //       isAnimating = false;
-    //     }, 300); // Matches scroll duration
-    //   };
+        timeout = setTimeout(() => {
+          isAnimating = false;
+        }, 300); // Matches scroll duration
+      };
 
-    //     window.addEventListener('wheel', handleWheel, { passive: false });
-    //     return () => window.removeEventListener('wheel', handleWheel);
-    //   }, [location.pathname]);
+        window.addEventListener('wheel', handleWheel, { passive: false });
+        return () => window.removeEventListener('wheel', handleWheel);
+      }, [location.pathname]);
 
     const handleLogin = () => {
         loginWithRedirect({
@@ -109,22 +109,17 @@ const Header = () => {
                 </div>
             </div>
             {popup && (
-                <div className="popup-overlay">
+                <div className="popup-overlay" onClick={() => setPopup(!popup)}>
                     <div className="popup-content">
                         {isAuthenticated ? (
                             <>
-                                <h2>Welcome {user?.name}</h2>
-                                <button onClick={handleLogout}>Sign Out</button>
+                                <button onClick={handleLogin}> My Profile </button>
+                                <button onClick={handleLogout}>Log Out</button>
                             </>
                         ) : (
-                            <>
-                                <h2>Sign In</h2>
-                                <button onClick={handleLogin}>Sign In</button>
-                                <h2>Sign Up</h2>
-                                <p>Don't have an account? Create one now!</p>
-                                <button onClick={handleRegister}>
-                                    Sign Up
-                                </button>
+                            <>  
+                                <button onClick={handleLogin}>Login</button>
+                                <button onClick={handleRegister}> Register </button>
                             </>
                         )}
                         <button

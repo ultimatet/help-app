@@ -187,7 +187,6 @@
   border-radius: 8px;
   display: flex;
   justify-content: flex-end;
-  /* This pushes content to the right */
   align-items: center;
   /* This vertically centers the content */
   min-height: 300px;
