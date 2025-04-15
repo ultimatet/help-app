@@ -12,14 +12,14 @@ const Header = () => {
     useEffect(() => {
         const handleScroll = () => {
             const isScrolled = window.scrollY > 10;
-            if (isScrolled !== scrolled && location.pathname === "/home") {
+            if (isScrolled !== scrolled) {
                 setScrolled(isScrolled);
             }
         };
 
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
-    }, [scrolled, location.pathname]);
+    }, [scrolled]);
 
     const handleLogin = () => {
         loginWithRedirect({

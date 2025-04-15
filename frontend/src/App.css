@@ -41,3 +41,9 @@ main {
   justify-content: center;
   align-items: center;
 }
+
+p {
+  font-size: 1.2rem;
+  color: #5a6d7a;
+  margin: 0;
+}
