@@ -12,40 +12,14 @@ const Header = () => {
     useEffect(() => {
         const handleScroll = () => {
             const isScrolled = window.scrollY > 10;
-            if (isScrolled !== scrolled) {
+            if (isScrolled !== scrolled && location.pathname === "/home") {
                 setScrolled(isScrolled);
             }
         };
 
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
-    }, [scrolled]);
-
-    useEffect(() => {
-        let isAnimating = false;
-        let timeout;
-        const handleWheel = (e) => {
-        if (location.pathname !== '/home' || window.scrollY !== 0 || isAnimating || e.deltaY <= 0) return;
-
-        e.preventDefault();
-        isAnimating = true;
-
-        // Only allow downward scroll (positive deltaY)
-        if (e.deltaY > 0) {
-          window.scrollBy({
-            top: window.innerHeight * 0.95,
-            behavior: 'smooth'
-          });
-        }
-
-        timeout = setTimeout(() => {
-          isAnimating = false;
-        }, 300); // Matches scroll duration
-      };
-
-        window.addEventListener('wheel', handleWheel, { passive: false });
-        return () => window.removeEventListener('wheel', handleWheel);
-      }, [location.pathname]);
+    }, [scrolled, location.pathname]);
 
     const handleLogin = () => {
         loginWithRedirect({
@@ -76,7 +50,6 @@ const Header = () => {
                 <h1 id="logo">
                     <Link to="/">HELP.</Link>
                 </h1>
-
                 <ul className="nav-list">
                     <li>
                         <Link to="/about">About Death Literacy</Link>
@@ -98,12 +71,8 @@ const Header = () => {
                     <img alt="user" src="/pic/person.png" />
                 </button>
             </nav>
-            <div className="hero">
-                <img
-                    src="/pic/hero-plant.png"
-                    alt="Hero"
-                    className="hero-image"
-                />
+            <div className={`hero ${location.pathname === "/home" ? "" : "hero-other"}`}>
+                <img src="/pic/hero-plant.png" alt="Hero" className="hero-image" />
                 <div className="hero-text">
                     <h1>Be informed. Be prepared.</h1>
                 </div>
@@ -117,15 +86,12 @@ const Header = () => {
                                 <button onClick={handleLogout}>Log Out</button>
                             </>
                         ) : (
-                            <>  
+                            <>
                                 <button onClick={handleLogin}>Login</button>
                                 <button onClick={handleRegister}> Register </button>
                             </>
                         )}
-                        <button
-                            className="close-btn"
-                            onClick={() => setPopup(false)}
-                        >
+                        <button className="close-btn" onClick={() => setPopup(false)}>
                             Close
                         </button>
                     </div>
