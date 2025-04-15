@@ -180,7 +180,7 @@
 #quiz {
   background-image: url('read.jpg');
   background-repeat: no-repeat;
-  background-position: left center;
+  background-position: center 56%;
   background-size: cover;
   border: none;
   padding: 80px 20px;
