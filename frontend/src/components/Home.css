@@ -96,6 +96,7 @@
 .section .btn:hover {
   background-color: #6b8c7d;
   cursor: pointer;
+  box-shadow: 0 4px 10px #88a09680;
 }
 
 #about {
@@ -180,7 +181,7 @@
 #quiz {
   background-image: url('read.jpg');
   background-repeat: no-repeat;
-  background-position: center 56%;
+  background-position: 50% 56%;
   background-size: cover;
   border: none;
   padding: 80px 20px;

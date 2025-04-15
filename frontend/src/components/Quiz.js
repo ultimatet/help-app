@@ -22,28 +22,33 @@ const Quiz = () => {
   };
 
   return (
-    <div className="quiz">
-      {showReport ? (
-        <Report answers={answers} questions={questions} />
-      ) : (
-        <>
-          <h2>{questions[currentQuestion].text}</h2>
-          <div className="options">
-            {questions[currentQuestion].options.map((option) => (
-              <button
-                key={option.id}
-                className={`option-button ${answers[questions[currentQuestion].id]?.score === option.score ? "selected" : ""}`}
-                onClick={() => handleAnswer(questions[currentQuestion].id, option.score)}
-              >
-                {option.text}
-              </button>
-            ))}
-            
+      <div className="quiz-container">
+          <div className="quiz">
+              {showReport ? (
+                  <Report answers={answers} questions={questions} />
+              ) : (
+                  <>
+                      <h2>{questions[currentQuestion].text}</h2>
+                      <div className="options">
+                          {questions[currentQuestion].options.map((option) => (
+                              <button
+                                  key={option.id}
+                                  className={`option-button ${answers[questions[currentQuestion].id]?.score === option.score ? "selected" : ""}`}
+                                  onClick={() =>
+                                      handleAnswer(questions[currentQuestion].id, option.score)
+                                  }
+                              >
+                                  {option.text}
+                              </button>
+                          ))}
+                      </div>
+                      <button className="back-button" onClick={() => navigate("/")}>
+                          Back
+                      </button>
+                  </>
+              )}
           </div>
-          <button className="back-button" onClick={() => navigate('/')}>Back</button>
-        </>
-      )}
-    </div>
+      </div>
   );
 };
 

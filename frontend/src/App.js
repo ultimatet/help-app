@@ -14,10 +14,11 @@ function App() {
     const location = useLocation();
 
     useEffect(() => {
-        if (!isAuthenticated && location.pathname === "/quiz") {
+        if (!isLoading && !isAuthenticated && location.pathname === "/quiz") {
             alert("You need to sign in to access the quiz.");
         }
-    }, [isAuthenticated, location.pathname]);
+    }, [isAuthenticated, isLoading, location.pathname]);
+
     if (isLoading) {
         return (
             <div className="App">
@@ -57,7 +58,6 @@ function App() {
                     />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="*" element={<Navigate to="/home" replace />} />
-                    Routes{" "}
                 </Routes>
             </div>
             <Footer />

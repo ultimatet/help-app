@@ -6,20 +6,14 @@ import "./Home.css";
 const Home = () => {
     const { ref: ref1, inView: inView1 } = useInView({
         threshold: 0.1,
-        rootMargin: "50px 0px",
-        triggerOnce: true,
     });
 
     const { ref: ref2, inView: inView2 } = useInView({
         threshold: 0.1,
-        rootMargin: "50px 0px",
-        triggerOnce: true,
     });
 
     const { ref: ref3, inView: inView3 } = useInView({
         threshold: 0.1,
-        rootMargin: "50px 0px",
-        triggerOnce: true,
     });
 
     return (

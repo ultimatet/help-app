@@ -12,7 +12,7 @@ body {
 }
 
 .container {
-  max-width: 1500px;
+  max-width: 90vw;
   margin: 0 auto;
   padding: 0;
 }
@@ -46,4 +46,8 @@ p {
   font-size: 1.2rem;
   color: #5a6d7a;
   margin: 0;
+}
+
+h2 {
+  font-size: 1.8rem;
 }
