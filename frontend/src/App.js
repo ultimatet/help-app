@@ -4,6 +4,7 @@ import Footer from "./components/Footer";
 import Quiz from "./components/Quiz";
 import Home from "./components/Home";
 import Contact from "./components/Contact";
+import Profile from "./components/Profile";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import ReactLoading from "react-loading";
@@ -48,15 +49,10 @@ function App() {
                     <Route path="/home" element={<Home />} />
                     <Route
                         path="/quiz"
-                        element={
-                            isAuthenticated ? (
-                                <Quiz />
-                            ) : (
-                                <Navigate to="/home" replace />
-                            )
-                        }
+                        element={isAuthenticated ? <Quiz /> : <Navigate to="/home" replace />}
                     />
                     <Route path="/contact" element={<Contact />} />
+                    <Route path="/profile" element={<Profile />} />
                     <Route path="*" element={<Navigate to="/home" replace />} />
                 </Routes>
             </div>

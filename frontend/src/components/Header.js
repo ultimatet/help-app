@@ -82,7 +82,9 @@ const Header = () => {
                     <div className="popup-content">
                         {isAuthenticated ? (
                             <>
-                                <button onClick={handleLogin}> My Profile </button>
+                                <button>
+                                    <Link to="/profile">My Profile</Link>
+                                </button>
                                 <button onClick={handleLogout}>Log Out</button>
                             </>
                         ) : (

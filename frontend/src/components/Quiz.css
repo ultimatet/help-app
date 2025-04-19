@@ -52,13 +52,6 @@
     box-shadow: 0 4px 10px #88a09680;
 }
 
-.quiz .option-button.selected {
-    background-color: #dbeafe;
-    border-color: #3b82f6;
-    color: #1e40af;
-    font-weight: 600;
-}
-
 
 .quiz .option-button:active {
     transform: translateY(0);
@@ -74,7 +67,8 @@
 }
 
 .back-button:hover {
-    background-color: #e5e7eb;
+    background-color: #f9fafb;
+    border-color: #88a096;
     color: #333;
     transform: translateY(-2px);
     box-shadow: 0 4px 10px #88a09680;
