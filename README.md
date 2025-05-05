@@ -32,6 +32,15 @@ The Death Literacy Platform is an online space designed to improve individuals' 
    npm install
    ```
 3. Run server:
+   
+-Frontend:
    ```bash
+   npm frontend
    npm start
+   ```
+-Backend:
+   ```bash
+   npm backend
+   npm start
+   ```
 
