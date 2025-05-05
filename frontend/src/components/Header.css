@@ -25,6 +25,7 @@
     width: 100%;
     z-index: 100;
     padding: 1rem;
+    height: 10vh;
     background: linear-gradient(95deg, transparent, #ffffff00);
     backdrop-filter: blur(5px);
     display: flex;
@@ -35,7 +36,7 @@
 }
 .nav.scrolled {
     background-color: #88a096dd;
-
+    height: 10vh;
     padding: 0.1rem 1rem;
 }
 
@@ -49,6 +50,7 @@
     align-items: center;
     position: relative;
     transition: padding 0.3s ease;
+    height: 6vh;
 }
 
 .nav-list::after {
@@ -103,6 +105,9 @@
     padding-left: 2rem;
     padding-top: 0.2rem;
 }
+#logo:hover {
+    transform: scale(1.005);
+}
 
 .user-icon {
     background: transparent;
@@ -115,7 +120,7 @@
 }
 
 .user-icon:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
     cursor: pointer;
 }
 
@@ -132,7 +137,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -140,13 +144,20 @@
 }
 
 .popup-content {
-    background-color: white;
-    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 10%;
+    right: 0;
+    margin: 0;
+    padding: 0;
     border-radius: 8px;
     text-align: center;
-    max-width: 400px;
-    width: 90%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    justify-content: center;
+    align-items: center;
+    width: 8%;
+    color: #5a6d7a;
+    overflow: hidden;
 }
 
 .popup-content h2 {
@@ -156,18 +167,22 @@
 }
 
 .popup-content button {
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
+    margin: 0;
+    padding: 0.5rem;
     font-size: 1rem;
     border: none;
-    border-radius: 4px;
     cursor: pointer;
+    background-color: #b38a6d;
+    width: 100%;
+}
+
+.popup-content button:hover {
+    background-color: #6b8c7d;
 }
 
 .popup-content .close-btn {
     background-color: red;
     color: white;
-    margin-top: 1.5rem;
 }
 
 .popup-content .close-btn:hover {
@@ -211,4 +226,11 @@
     margin: 0;
     white-space: nowrap;
     text-shadow: #000000;
+}
+
+.hero-other {
+    height: 13vh;
+}
+.hero-other .hero-text {
+    display: none;
 }
