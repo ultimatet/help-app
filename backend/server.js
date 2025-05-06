@@ -1,11 +1,7 @@
 require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const jwksRsa = require("jwks-rsa");
-const { expressjwt: jwt } = require("express-jwt");
 const { sequelize } = require("./models");
 
-const app = express();
+const app = require("./app");
 const PORT = process.env.PORT || 5000;
 
 // Database and Server Initialization

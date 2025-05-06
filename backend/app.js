@@ -3,12 +3,24 @@ const express = require("express");
 const cors = require("cors");
 const jwksRsa = require("jwks-rsa");
 const { expressjwt: jwt } = require("express-jwt");
+const questionRoutes = require("./routes/questionRoutes");
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Logging Middleware
+app.use((req, res, next) => {
+    console.log("Request received:", {
+        method: req.method,
+        url: req.url,
+        path: req.path,
+        body: req.body,
+    });
+    next();
+});
 
 // Auth0 JWT Middleware
 const checkJwt = jwt({
@@ -36,6 +48,12 @@ app.use((err, req, res, next) => {
 app.get("/", (req, res) => res.send("Public API - No Authentication Required"));
 app.get("/profile", checkJwt, (req, res) => {
     res.send({ message: "This is a protected route!", user: req.user });
+});
+
+app.use("/question", questionRoutes);
+
+app.get("/test", (req, res) => {
+    res.json({ message: "Test route working" });
 });
 
 module.exports = app;

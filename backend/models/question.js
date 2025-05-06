@@ -1,3 +1,5 @@
+const choice = require("./choice");
+
 module.exports = (sequelize, DataTypes) => {
     const Question = sequelize.define(
         "Question",

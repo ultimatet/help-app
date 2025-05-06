@@ -6,6 +6,9 @@ const questionController = {
             const questions = await Question.findAll({
                 include: [{ model: Choice, as: "choices" }],
             });
+            if (questions.length === 0) {
+                return res.status(200).json([]); // Return 200 with an empty array
+            }
             res.status(200).json(questions);
         } catch (error) {
             console.error("Error fetching questions:", error);
@@ -30,6 +33,7 @@ const questionController = {
     },
 
     async createQuestion(req, res) {
+        console.log("Received POST request for creating question");
         const { question_text, category,  choices } = req.body;
         try {
             const newQuestion = await Question.create(
@@ -81,6 +85,21 @@ const questionController = {
             res.status(500).json({ error: "Internal server error" });
         }
     },
+
+    async deleteQuestion(req, res) {
+        const { id } = req.params;
+        try {
+            const question = await Question.findByPk(id);
+            if (!question) {
+                return res.status(404).json({ error: "Question not found" });
+            }
+            await question.destroy();
+            res.status(204).send();
+        } catch (error) {
+            console.error("Error deleting question:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
 };
 
 module.exports = questionController;
