@@ -4,6 +4,7 @@ const cors = require("cors");
 const jwksRsa = require("jwks-rsa");
 const { expressjwt: jwt } = require("express-jwt");
 const questionRoutes = require("./routes/questionRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
@@ -51,6 +52,7 @@ app.get("/profile", checkJwt, (req, res) => {
 });
 
 app.use("/question", questionRoutes);
+app.use("/user", userRoutes);
 
 app.get("/test", (req, res) => {
     res.json({ message: "Test route working" });

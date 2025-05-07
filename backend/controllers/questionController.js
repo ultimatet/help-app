@@ -7,7 +7,7 @@ const questionController = {
                 include: [{ model: Choice, as: "choices" }],
             });
             if (questions.length === 0) {
-                return res.status(200).json([]); // Return 200 with an empty array
+                return res.status(200).json([]); 
             }
             res.status(200).json(questions);
         } catch (error) {
