@@ -6,7 +6,7 @@ import "./Quiz.css";
 const Quiz = () => {
     const [questions, setQuestions] = useState([]);
     const [currentQuestion, setCurrentQuestion] = useState(0);
-    const [answers, setAnswers] = useState({});
+    const [choice, setAnswers] = useState({});
     const [showReport, setShowReport] = useState(false);
     const navigate = useNavigate();
 
@@ -26,7 +26,7 @@ const Quiz = () => {
     }, []);
 
     const handleAnswer = (questionId, score) => {
-        setAnswers({ ...answers, [questionId]: { score } });
+        setAnswers({ ...choice, [questionId]: { score } });
 
         if (currentQuestion < questions.length - 1) {
             setCurrentQuestion(currentQuestion + 1);
@@ -43,16 +43,16 @@ const Quiz = () => {
         <div className="quiz-container">
             <div className="quiz">
                 {showReport ? (
-                    <Report answers={answers} questions={questions} />
+                    <Report choice={choice} questions={questions} />
                 ) : (
                     <>
-                        <h2>{current.question_text}</h2>
+                        <h2 className="question-text">{current.question_text}</h2>
                         <div className="options">
                             {current.choices.map((choice) => (
                                 <button
                                     key={choice.id}
                                     className={`option-button ${
-                                        answers[current.id]?.score === choice.points
+                                        choice[current.id]?.score === choice.points
                                             ? "selected"
                                             : ""
                                     }`}

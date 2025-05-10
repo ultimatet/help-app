@@ -5,6 +5,8 @@ import Quiz from "./components/Quiz";
 import Home from "./components/Home";
 import Contact from "./components/Contact";
 import Profile from "./components/Profile";
+import About from "./components/About";
+import Resource from "./components/Resource";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import ReactLoading from "react-loading";
@@ -51,6 +53,8 @@ function App() {
                         path="/quiz"
                         element={isAuthenticated ? <Quiz /> : <Navigate to="/home" replace />}
                     />
+                    <Route path="/about" element={<About/>} />
+                    <Route path="/resource" element={<Resource />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="*" element={<Navigate to="/home" replace />} />

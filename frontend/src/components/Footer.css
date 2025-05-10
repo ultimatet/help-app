@@ -8,7 +8,6 @@ footer {
 }
 .container-footer {
     background-color: #88a096;
-    color: #f8f4e9;
     text-align: center;
     align-items: center;
     justify-content: center;
@@ -18,27 +17,6 @@ footer {
     justify-content: space-evenly;
 }
 
-.feedback-section {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    padding: 0;
-    gap: 10px;
-}
-
-.feedback-btn {
-    text-decoration: none;
-    color: #f8f4e9;
-    background-color: #b38a6d;
-    padding: 12px 10px;
-    margin: 10px auto;
-    border-radius: 5px;
-    display: inline-block;
-    width: 40%;
-    align-self: center;
-}
-
-.feedback-btn:hover {
-    background-color: #6b8c7d;
-    cursor: pointer;
+.container-footer p {
+    color: white;
 }
