@@ -4,7 +4,7 @@ import "./Resource.css";
 const Resource = () => {
     return (
         <div className="resource">
-            <img src="/pic/tree.png" alt="tree"></img>
+            <img src="/pic/tree.svg" alt="tree"></img>
             <div className="resource-container">
                 <section className="resource-block">
                     <h2>Where to get immediate help (for Australian citizens)</h2>

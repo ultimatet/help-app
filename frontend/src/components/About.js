@@ -4,7 +4,7 @@ import "./About.css";
 const About = () => {
     return (
         <div className="about">
-            <img src="/pic/tree.png" alt="tree" />
+            <img src="/pic/tree.svg" alt="tree" />
             <div className="about-container">
                 <section className="about-block" id="what-is-it">
                     <h2>What is Death Literacy?</h2>
