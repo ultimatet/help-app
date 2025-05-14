@@ -1,5 +1,6 @@
 {
     "scripts": {
+        "sync:questions": "node scripts/sync-questions.js",
         "start": "node server.js",
         "dev": "nodemon server.js"
     },
