@@ -1,0 +1,53 @@
+.org {
+    display: flex;
+    margin: 0;
+}
+
+.org img {
+    margin: 0;
+    width: 16vw;
+}
+
+.org-container .org-block {
+    margin: 1.75rem 6rem;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.org-container .org-block h2 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+.org-container .org-block h3 {
+    font-size: 1.1rem;
+}
+
+.org-container .org-block p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.org-container .org-block ul {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.org-container .org-block ul li {
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+}
+
+.org-container .org-block a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.org-container .org-block a:visited {
+    color: inherit;
+}
+
+.org-container .org-block a:hover {
+    color: #2d8659;
+}

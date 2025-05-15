@@ -5,10 +5,22 @@ import Quiz from "./components/Quiz";
 import Home from "./components/Home";
 import Contact from "./components/Contact";
 import Profile from "./components/Profile";
+import About from "./components/About";
+import Resource from "./components/Resource";
+import Org from "./components/Org";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import ReactLoading from "react-loading";
 import "./App.css";
+
+function ScrollToTop() {
+    const { pathname } = useLocation();
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
+
+    return null;
+}
 
 function App() {
     const { isAuthenticated, isLoading } = useAuth0();
@@ -43,6 +55,7 @@ function App() {
     return (
         <div className="App">
             <Header />
+            <ScrollToTop /> 
             <div className="container">
                 <Routes>
                     <Route path="/" element={<Navigate to="/home" replace />} />
@@ -51,6 +64,9 @@ function App() {
                         path="/quiz"
                         element={isAuthenticated ? <Quiz /> : <Navigate to="/home" replace />}
                     />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/resource" element={<Resource />} />
+                    <Route path="/org" element={<Org />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="*" element={<Navigate to="/home" replace />} />
