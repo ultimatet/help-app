@@ -52,9 +52,6 @@ const Header = () => {
                 </h1>
                 <ul className="nav-list">
                     <li>
-                        <Link to="/home">Home Page</Link>
-                    </li>
-                    <li>
                         <Link to="/about">About Death Literacy</Link>
                     </li>
                     <li>
@@ -63,9 +60,9 @@ const Header = () => {
                     <li>
                         <Link to="/resource">Resource & Support</Link>
                     </li>
-                    {/* <li>
+                    <li>
                         <Link to="/org">For Organisations</Link>
-                    </li> */}
+                    </li>
                     <li>
                         <Link to="/contact">Contact Us</Link>
                     </li>

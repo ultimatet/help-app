@@ -9,99 +9,59 @@ const About = () => {
                 <section className="about-block" id="what-is-it">
                     <h2>What is Death Literacy?</h2>
                     <p>
-                        Death Literacy is the knowledge and skills that make it possible to gain
-                        access to, understand and act upon end-of-life and death care options.
+                        Death literacy is the practical knowledge and skills that help people
+                        understand and act on end-of-life options—for themselves or their loved
+                        ones. This includes:
                     </p>
-                    <p>
-                        It’s the practical knowledge needed to plan well for end of life, for
-                        yourself or for people that you love. This includes knowledge about:
-                        <ul>
-                            <li>What good end-of-life care looks like for individuals.</li>
-                            <li>What happens when someone dies</li>
-                            <li>What legal processes need to be followed</li>
-                            <li>Who needs to be notified </li>
-                            <li>Who should be involved</li>
-                            <li>What support is available at different stages</li>
-                        </ul>
-                    </p>
+                    <ul>
+                        <li>What good end-of-life care looks like</li>
+                        <li>What happens when someone dies</li>
+                        <li>Legal steps and who needs to be notified</li>
+                        <li>Available support throughout the process</li>
+                    </ul>
                 </section>
 
                 <section className="about-block" id="why-it-matters">
-                    <h2>Why is it important?</h2>
+                    <h2>Why It Matters</h2>
                     <p>
-                        In many societies, conversations about death are often avoided, leaving
-                        individuals unprepared when facing end-of-life decisions — either for
-                        themselves or their loved ones. Low death literacy can lead to confusion,
-                        distress, or missed opportunities for support. <br />
-                        Improving death literacy:
-                        <ul>
-                            <li>Encourages open, informed conversations about mortality.</li>
-                            <li>Reduces fear and anxiety around death and dying.</li>
-                            <li>Helps people make better end-of-life care decisions.</li>
-                            <li>Strengthens community support during times of loss. </li>
-                        </ul>
-                        <br />
-                        With higher death literacy, individuals are better equipped to advocate for
-                        themselves and others, plan ahead, and find meaning even during difficult
-                        times.
+                        Avoiding conversations about death often leads to confusion, stress, and
+                        missed opportunities for support. Increasing death literacy can:
                     </p>
+                    <ul>
+                        <li>Encourage open, informed conversations</li>
+                        <li>Reduce fear and uncertainty</li>
+                        <li>Support better end-of-life planning and care</li>
+                        <li>Strengthen support for loved ones during loss</li>
+                    </ul>
                 </section>
 
                 <section className="about-block" id="how-it-helps">
-                    <h2>Be informed, be prepared</h2>
-                    <p>
-                        Knowledge about Death Literacy comes with a lot of benefits. This includes:
-                        <br /> <br />
-                        <h3>Empowerment and Informed Choices:</h3>
-                        <ul>
-                            <li>
-                                Understand end-of-life options (care, funerals, legal) to make
-                                informed decisions aligned with your values.
-                            </li>
-                            <li>Navigate complex healthcare systems with greater confidence.</li>
-                        </ul>
-                        <br />
-                        <h3>Reduced Fear and Anxiety:</h3>
-                        <ul>
-                            <li>
-                                Demystify death and dying, replacing uncertainty with understanding.
-                            </li>
-                            <li>Find greater peace of mind by being better prepared.</li>
-                        </ul>
-                        <br />
-                        <h3>Proactive Planning:</h3>
-                        <ul>
-                            <li>
-                                Alleviate burdens on loved ones by planning your end-of-life wishes.
-                            </li>
-                            <li>Increase the likelihood of your preferences being honored.</li>
-                        </ul>
-                        <br />
-                        <h3>Improved Communication:</h3>
-                        <ul>
-                            <li>Facilitate open and honest conversations about death and grief.</li>
-                            <li>Offer better support to those experiencing loss</li>
-                        </ul>
-                        <br />
-                        <h3>Improved Communication:</h3>
-                        <ul>
-                            <li>
-                                Understand death as a natural part of life, fostering appreciation
-                                for the present.
-                            </li>
-                            <li>Potentially inspire a more intentional and fuller life.</li>
-                        </ul>
-                        <br />
-                        <h3>Societal Impact:</h3>
-                        <ul>
-                            <li>Advocate for better end-of-life care and support for all.</li>
-                            <li>Build more compassionate and understanding communities.</li>
-                            <li>Break down societal taboos surrounding death.</li>
-                        </ul>
-                    </p>
+                    <h2>Be Informed, Be Prepared</h2>
+                    <ul>
+                        <li>
+                            <strong>Empowerment:</strong> Make confident decisions aligned with your
+                            values and wishes.
+                        </li>
+                        <li>
+                            <strong>Peace of Mind:</strong> Reduce anxiety by understanding what to
+                            expect.
+                        </li>
+                        <li>
+                            <strong>Proactive Planning:</strong> Relieve the burden on loved ones by
+                            planning ahead.
+                        </li>
+                        <li>
+                            <strong>Improved Communication:</strong> Foster open conversations about
+                            death and grief.
+                        </li>
+                        <li>
+                            <strong>Social Impact:</strong> Build more compassionate communities and
+                            challenge taboos around death.
+                        </li>
+                    </ul>
                 </section>
 
-                {/* <section className="about-block" id="who-is-it-for">
+                <section className="about-block" id="who-is-it-for">
                     <h2>Who is This For?</h2>
                     <p>
                         This platform is designed for:
@@ -118,7 +78,7 @@ const About = () => {
                         Whether you're just starting to think about these issues or already deeply
                         involved, this tool offers guidance, reflection, and a path forward.
                     </p>
-                </section> */}
+                </section>
             </div>
         </div>
     );
