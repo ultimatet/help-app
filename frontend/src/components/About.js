@@ -101,7 +101,7 @@ const About = () => {
                     </p>
                 </section>
 
-                <section className="about-block" id="who-is-it-for">
+                {/* <section className="about-block" id="who-is-it-for">
                     <h2>Who is This For?</h2>
                     <p>
                         This platform is designed for:
@@ -118,7 +118,7 @@ const About = () => {
                         Whether you're just starting to think about these issues or already deeply
                         involved, this tool offers guidance, reflection, and a path forward.
                     </p>
-                </section>
+                </section> */}
             </div>
         </div>
     );
