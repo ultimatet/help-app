@@ -58,6 +58,7 @@ app.get("/profile", checkJwt, (req, res) => {
 // Your existing routes
 app.use("/question", questionRoutes);
 app.use("/user", userRoutes);
+app.use("/admin", checkJwt, userRoutes); 
 
 // **New Quiz Routes** (public endpoints)
 app.use("/quiz", quizRouter);
