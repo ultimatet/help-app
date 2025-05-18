@@ -14,7 +14,7 @@ const Profile = () => {
                         <h2>{user.name}</h2>
                         <p>{user.email}</p>
                         <p>{user.birthdate}</p>
-                        <p>{user.gender}</p>
+                        <p>{user.role}</p>
                     </div>
                     <div className="report-container">
                         <div className="report-card">

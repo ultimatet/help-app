@@ -1,3 +1,4 @@
+const { get } = require('../app');
 const {User} = require('../models');
 
 const userController = {
@@ -27,6 +28,29 @@ const userController = {
             res.status(500).json({ error: "Internal server error" });
         }
     },
+
+    async getUserRoleByEmail(req, res) {
+        const { email } = req.params;
+
+        if (!email) {
+            return res.status(400).json({ error: "Email parameter is required" });
+        }
+
+        try {
+            const user = await User.findOne({ where: { auth0_email: email } });
+
+            if (!user) {
+                return res.status(404).json({ error: "User not found" });
+            }
+
+            // Send only the role back
+            res.status(200).json({ role: user.role });
+        } catch (error) {
+            console.error("Error fetching user:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    },
+    
 
     async createUser(req, res) {
         const { email, role = 'user' } = req.body;

@@ -1,0 +1,118 @@
+/* Admin Dashboard Styles */
+.dashboard-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 24px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+}
+
+.dashboard-container h2 {
+    margin-bottom: 24px;
+    font-size: 2rem;
+}
+
+.dashboard-form {
+    margin-bottom: 32px;
+    padding: 16px;
+    background: #f7faf7;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.dashboard-form input {
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    border: 1px solid #cfd8dc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.dashboard-form button {
+    background-color: #b38a6d;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    margin-top: 8px;
+    margin-right: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.dashboard-form button:hover {
+    background-color: #6b8c7d;
+    cursor: pointer;
+    box-shadow: 0 4px 10px #88a09680;
+}
+
+.dashboard-choices {
+    margin-bottom: 12px;
+}
+
+.dashboard-choices input {
+    flex: 1;
+    margin-right: 8px;
+}
+
+.dashboard-choices .remove-btn {
+    background: #e57373;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    margin-left: 8px;
+}
+
+.dashboard-choices .remove-btn:hover {
+    background: #c62828;
+}
+
+.dashboard-list {
+    list-style: none;
+    padding: 0;
+}
+
+.dashboard-list li {
+    background: #f4f8f4;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    padding: 16px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.dashboard-list i {
+    color: #888;
+    font-size: 0.98rem;
+}
+
+.dashboard-list ul {
+    margin: 8px 0 0 18px;
+    padding: 0;
+}
+
+.dashboard-list button {
+    background: #1976d2;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 12px;
+    margin-right: 8px;
+    cursor: pointer;
+    font-size: 0.97rem;
+}
+
+.dashboard-list button:hover {
+    background: #0d47a1;
+}
+
+.dashboard-error {
+    color: #d32f2f;
+    margin: 40px;
+    font-size: 1.2rem;
+    text-align: center;
+}

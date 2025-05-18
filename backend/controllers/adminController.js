@@ -24,22 +24,24 @@ const adminController = {
 
     async updateQuestion(req, res) {
         const { id } = req.params;
-        const { question_text, category, choices } = req.body;
+        const { question_text, category, points, choices } = req.body;
+    
         try {
             const question = await Question.findByPk(id, {
                 include: [{ model: Choice, as: "choices" }],
             });
+    
             if (!question) {
                 return res.status(404).json({ error: "Question not found" });
             }
-
-            // Update question fields
+    
+            // Update main fields
             question.question_text = question_text;
             question.category = category;
             question.points = points;
             await question.save();
-
-            // Replace choices (simplified approach)
+    
+            // Replace existing choices
             await Choice.destroy({ where: { questionId: question.id } });
             const newChoices = await Choice.bulkCreate(
                 choices.map((choice) => ({
@@ -47,7 +49,7 @@ const adminController = {
                     questionId: question.id,
                 }))
             );
-
+    
             res.status(200).json({ question, choices: newChoices });
         } catch (error) {
             console.error("Error updating question:", error);

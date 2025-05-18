@@ -8,6 +8,7 @@ import Profile from "./components/Profile";
 import About from "./components/About";
 import Resource from "./components/Resource";
 import Org from "./components/Org";
+import Dashboard from "./components/Dashboard";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import ReactLoading from "react-loading";
@@ -69,6 +70,7 @@ function App() {
                     <Route path="/org" element={<Org />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/profile" element={<Profile />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="*" element={<Navigate to="/home" replace />} />
                 </Routes>
             </div>
