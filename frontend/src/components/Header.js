@@ -5,7 +5,8 @@ import "./Header.css";
 
 const Header = () => {
     const [popup, setPopup] = useState(false);
-    const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
+    const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
+    const [userRole, setUserRole] = useState(null);
     const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
 
@@ -20,6 +21,30 @@ const Header = () => {
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, [scrolled]);
+
+    useEffect(() => {
+            const fetchRole = async () => {
+                if (isAuthenticated && user?.email) {
+                    try {
+                        const encodedEmail = encodeURIComponent(user.email); // handle @
+                        const response = await fetch(
+                            `http://localhost:5000/user/auth0_email/${encodedEmail}`
+                        );
+                        const data = await response.json();
+    
+                        if (response.ok) {
+                            setUserRole(data.role);
+                        } else {
+                            console.error("Error fetching role:", data.error);
+                        }
+                    } catch (error) {
+                        console.error("API error:", error);
+                    }
+                }
+            };
+    
+            fetchRole();
+        }, [isAuthenticated, user]);
 
     const handleLogin = () => {
         loginWithRedirect({
@@ -85,6 +110,11 @@ const Header = () => {
                                 <button>
                                     <Link to="/profile">My Profile</Link>
                                 </button>
+                                {userRole === "admin" && (
+                                    <button>
+                                        <Link to="/dashboard">Dashboard</Link>
+                                    </button>
+                                )}
                                 <button onClick={handleLogout}>Log Out</button>
                             </>
                         ) : (
