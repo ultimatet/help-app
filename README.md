@@ -15,7 +15,6 @@ The Death Literacy Platform is an online space designed to improve individuals' 
 - **Death Literacy Assessment**: A questionnaire that helps users understand their current level of death literacy across key dimensions
 - **Personalized Recommendations**: Customized guidance based on assessment results
 - **Educational Resources**: Content covering end-of-life care, grief management, and practical planning
-- **Planning Tools**: Interactive guides for advance care planning and end-of-life documentation
 - **Role-based Access**: Separate interfaces and permissions for general users, researchers, and organizational partners for secure and tailored experiences.
 
 ## Getting Started
