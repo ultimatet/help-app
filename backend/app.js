@@ -9,7 +9,6 @@ const { expressjwt: jwt } = require("express-jwt");
 const questionRoutes    = require("./routes/questionRoutes");
 const userRoutes        = require("./routes/userRoutes");
 const adminRoutes       = require("./routes/adminRoutes");
-// New quiz route
 const quizRouter        = require("./routes/quiz");
 
 const app = express();
@@ -60,8 +59,6 @@ app.get("/profile", checkJwt, (req, res) => {
 app.use("/question", questionRoutes);
 app.use("/user", userRoutes);
 app.use("/admin", adminRoutes); 
-
-// **New Quiz Routes** (public endpoints)
 app.use("/quiz", quizRouter);
 
 // Test route

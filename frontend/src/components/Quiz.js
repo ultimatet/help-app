@@ -4,72 +4,113 @@ import Report from "./Report";
 import "./Quiz.css";
 
 const Quiz = () => {
-    const [questions, setQuestions] = useState([]);
-    const [currentQuestion, setCurrentQuestion] = useState(0);
-    const [choice, setAnswers] = useState({});
-    const [showReport, setShowReport] = useState(false);
-    const navigate = useNavigate();
+  const [questions, setQuestions] = useState([]);
+  const [answers, setAnswers]     = useState({});
+  const [step, setStep]           = useState(0);
+  const [report, setReport]       = useState(null);
+  const [loading, setLoading]     = useState(false);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchQuestions = async () => {
-            try {
-                const response = await fetch("http://localhost:5000/question"); 
-                const data = await response.json();
-                console.log("Fetched questions:", data); // Debugging line
-                setQuestions(data);
-            } catch (err) {
-                console.error("Failed to fetch questions:", err);
-            }
-        };
+  // 1) Fetch questions on mount
+  useEffect(() => {
+    fetch("/quiz/questions")
+      .then(res => res.json())
+      .then(setQuestions)
+      .catch(err => console.error("Failed to fetch quiz questions:", err));
+  }, []);
 
-        fetchQuestions();
-    }, []);
+  // 2) Record an answer (1–5)
+  const handleSelect = value => {
+    const q = questions[step];
+    setAnswers(a => ({ ...a, [q.id]: value }));
+  };
 
-    const handleAnswer = (questionId, score) => {
-        setAnswers({ ...choice, [questionId]: { score } });
+  // 3) Move next or submit
+  const handleNext = () => {
+    if (step < questions.length - 1) {
+      setStep(s => s + 1);
+    } else {
+      submitQuiz();
+    }
+  };
 
-        if (currentQuestion < questions.length - 1) {
-            setCurrentQuestion(currentQuestion + 1);
-        } else {
-            setShowReport(true);
-        }
-    };
+  // 4) Submit answers to backend
+  const submitQuiz = async () => {
+    setLoading(true);
+    try {
+      const payload = {
+        userId: 1,   // TODO: replace with actual authenticated user id
+        answers
+      };
+      const res = await fetch("/quiz/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const { report } = await res.json();
+      setReport(report);
+    } catch (err) {
+      console.error("Quiz submission failed:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    if (questions.length === 0) return <div>Loading questions...</div>;
+  // 5) Render states
+  if (!questions.length) return <div>Loading questions…</div>;
+  if (report) return <Report report={report} onRetake={() => {
+    setReport(null);
+    setAnswers({});
+    setStep(0);
+  }} />;
 
-    const current = questions[currentQuestion];
+  const q = questions[step];
+  const selected = answers[q.id] || 0;
 
-    return (
-        <div className="quiz-container">
-            <div className="quiz">
-                {showReport ? (
-                    <Report choice={choice} questions={questions} />
-                ) : (
-                    <>
-                        <h2 className="question-text">{current.question_text}</h2>
-                        <div className="options">
-                            {current.choices.map((choice) => (
-                                <button
-                                    key={choice.id}
-                                    className={`option-button ${
-                                        choice[current.id]?.score === choice.points
-                                            ? "selected"
-                                            : ""
-                                    }`}
-                                    onClick={() => handleAnswer(current.id, choice.points)}
-                                >
-                                    {choice.choice_text}
-                                </button>
-                            ))}
-                        </div>
-                        <button className="back-button" onClick={() => navigate("/")}>
-                            Back
-                        </button>
-                    </>
-                )}
-            </div>
+  return (
+    <div className="quiz-container">
+      <div className="quiz">
+        <h2>Question {step + 1} of {questions.length}</h2>
+        <p className="question-text">{q.text}</p>
+
+        <div className="likert-scale">
+          {[1,2,3,4,5].map(n => (
+            <label key={n} className="likert-option">
+              <input
+                type="radio"
+                name={q.id}
+                value={n}
+                checked={selected === n}
+                onChange={() => handleSelect(n)}
+              />
+              {n}
+            </label>
+          ))}
         </div>
-    );
+
+        <div className="quiz-nav">
+          {step > 0 && (
+            <button onClick={() => setStep(s => s - 1)} disabled={loading}>
+              Back
+            </button>
+          )}
+          <button
+            onClick={handleNext}
+            disabled={!selected || loading}
+            className="next-button"
+          >
+            {step < questions.length - 1
+              ? "Next"
+              : loading ? "Submitting…" : "Submit Quiz"}
+          </button>
+        </div>
+
+        <button className="cancel-button" onClick={() => navigate("/")}>
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default Quiz;
