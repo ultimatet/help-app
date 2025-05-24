@@ -17,7 +17,7 @@ module.exports = function loadOutputLookup() {
 
         // 2) grab the columns
         const range   = row['Range (ie for lower, similar, higher)']?.trim();
-        const label   = row['Your Score']?.trim();          // “Lower” / “Similar” / “Higher”
+        const label   = row['Your Score']?.trim() + " compared to national benchmark";          // “Lower” / “Similar” / “Higher”
         const meaning = row['What This Means']?.trim();
         const action  = row['What You Can Do']?.trim();
         if (!range || !label) return;  

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
+import FileSaver from "file-saver";
 import "./Dashboard.css";
 
 const Dashboard = () => {
@@ -19,9 +20,7 @@ const Dashboard = () => {
             if (isAuthenticated && user?.email) {
                 try {
                     const encodedEmail = encodeURIComponent(user.email); // handle @
-                    const response = await fetch(
-                        `http://localhost:5000/user/auth0_email/${encodedEmail}`
-                    );
+                    const response = await fetch(`http://localhost:5000/user/role/${encodedEmail}`);
                     const data = await response.json();
 
                     if (response.ok) {
@@ -97,6 +96,18 @@ const Dashboard = () => {
     };
 
     const handleSubmit = (e) => {};
+
+    // Export quiz_results as CSV and trigger download
+    const handleExport = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/admin/export-quiz-results");
+            if (!response.ok) throw new Error("Failed to fetch quiz results");
+            const blob = await response.blob();
+            FileSaver.saveAs(blob, "quiz_results.csv");
+        } catch (err) {
+            alert("Export failed: " + err.message);
+        }
+    };
 
     if (error) return <div className="dashboard-error">{error}</div>;
     if (!isAuthenticated || (userRole !== "admin" && userRole !== "researcher")) return null;
@@ -210,7 +221,53 @@ const Dashboard = () => {
 
                 {view === "export" && (
                     <div className="export-placeholder">
-                        <p>Export functionality coming soon...</p>
+                        <div className="table-summary">
+                            <h2>Summary of Quiz Results Table</h2>
+                            <p>
+                                This table displays quiz submissions collected from all users across
+                                the platform. Each row represents a unique quiz attempt and includes
+                                the following information:
+                            </p>
+                            <ul>
+                                <li>
+                                    <strong>id</strong>: The unique identifier for each quiz result
+                                    submission. Each quiz attempt receives its own sequential id.
+                                </li>
+                                <li>
+                                    <strong>userId</strong>: The unique identifier of the user who
+                                    submitted the quiz. This links the result to the user's account
+                                    in the database.
+                                </li>
+                                <li>
+                                    <strong>answers</strong>: A JSON array containing each{" "}
+                                    <code>questionId</code> and its corresponding{" "}
+                                    <code>selectedValue</code> (rated from 1 to 5).
+                                </li>
+                                <li>
+                                    <strong>categoryScores</strong>: A JSON object with the average
+                                    score per domain (e.g.,
+                                    <em> Talking Support</em>, <em> Knowledge</em>,{" "}
+                                    <em> Experience</em>, etc.), calculated based on the answers
+                                    submitted.
+                                </li>
+                                <li>
+                                    <strong>createdAt / updatedAt</strong>: Timestamps indicating
+                                    when each quiz result was recorded or last modified.
+                                </li>
+                                <li>
+                                    <strong>user_email</strong>: The email of the user who submitted
+                                    the quiz, used to associate results with individual users.
+                                </li>
+                            </ul>
+                            <p>
+                                This dataset enables researchers and administrators to analyze
+                                trends in death literacy, monitor learning progress across
+                                demographics, and evaluate the effectiveness of interventions or
+                                educational resources offered on the platform.
+                            </p>
+                        </div>
+
+                        <button onClick={handleExport}>Download Quiz Results</button>
                         <button onClick={() => setView("menu")}>← Back to Menu</button>
                     </div>
                 )}

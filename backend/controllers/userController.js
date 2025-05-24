@@ -50,7 +50,27 @@ const userController = {
             res.status(500).json({ error: "Internal server error" });
         }
     },
-    
+
+    async getUserIdByEmail (req, res) {
+        const { email } = req.params;
+
+        if (!email) {
+            return res.status(400).json({ error: "Email parameter is required" });
+        }
+
+        try {
+            const user = await User.findOne({ where: { auth0_email: email } });
+
+            if (!user) {
+                return res.status(404).json({ error: "User not found" });
+            }
+
+            res.status(200).json({ id: user.id });
+        } catch (error) {
+            console.error("Error fetching user score:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    },
 
     async createUser(req, res) {
         const { email, role = 'user' } = req.body;

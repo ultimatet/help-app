@@ -28,7 +28,7 @@ const Header = () => {
                     try {
                         const encodedEmail = encodeURIComponent(user.email); // handle @
                         const response = await fetch(
-                            `http://localhost:5000/user/auth0_email/${encodedEmail}`
+                            `http://localhost:5000/user/role/${encodedEmail}`
                         );
                         const data = await response.json();
     

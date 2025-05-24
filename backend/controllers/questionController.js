@@ -1,11 +1,9 @@
-const { Question, Choice } = require("../models");
+const { Question } = require("../models");
 
 const questionController = {
     async getAllQuestions(req, res) {
         try {
-            const questions = await Question.findAll({
-                include: [{ model: Choice, as: "choices" }],
-            });
+            const questions = await Question.findAll();
             if (questions.length === 0) {
                 return res.status(200).json([]);
             }
@@ -19,9 +17,7 @@ const questionController = {
     async getQuestionById(req, res) {
         const { id } = req.params;
         try {
-            const question = await Question.findByPk(id, {
-                include: [{ model: Choice, as: "choices" }],
-            });
+            const question = await Question.findByPk(id);
             if (!question) {
                 return res.status(404).json({ error: "Question not found" });
             }

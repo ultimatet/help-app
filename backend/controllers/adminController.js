@@ -1,4 +1,6 @@
-const { Question, Choice } = require("../models");
+const { Question, Choice, QuizResult, User } = require("../models");
+const { Parser } = require("json2csv");
+const fs = require("fs");
 
 const adminController = {
     async createQuestion(req, res) {
@@ -25,22 +27,22 @@ const adminController = {
     async updateQuestion(req, res) {
         const { id } = req.params;
         const { question_text, category, points, choices } = req.body;
-    
+
         try {
             const question = await Question.findByPk(id, {
                 include: [{ model: Choice, as: "choices" }],
             });
-    
+
             if (!question) {
                 return res.status(404).json({ error: "Question not found" });
             }
-    
+
             // Update main fields
             question.question_text = question_text;
             question.category = category;
             question.points = points;
             await question.save();
-    
+
             // Replace existing choices
             await Choice.destroy({ where: { questionId: question.id } });
             const newChoices = await Choice.bulkCreate(
@@ -49,7 +51,7 @@ const adminController = {
                     questionId: question.id,
                 }))
             );
-    
+
             res.status(200).json({ question, choices: newChoices });
         } catch (error) {
             console.error("Error updating question:", error);
@@ -69,6 +71,33 @@ const adminController = {
         } catch (error) {
             console.error("Error deleting question:", error);
             res.status(500).json({ error: "Internal server error" });
+        }
+    },
+
+    // Export quiz_results as CSV
+    exportQuizResults: async (req, res) => {
+        try {
+            const results = await QuizResult.findAll({
+                include: [{ model: User, as: "user", attributes: ["id", "auth0_email"] }],
+                order: [["createdAt", "DESC"]],
+            });
+            const plainResults = results.map((r) => r.get({ plain: true }));
+            // Flatten user info
+            const data = plainResults.map((r) => ({
+                ...r,
+                user_email: r.user ? r.user.auth0_email : "",
+            }));
+            // Remove nested user object
+            data.forEach((d) => delete d.user);
+            // Convert to CSV
+            const parser = new Parser();
+            const csv = parser.parse(data);
+            res.header("Content-Type", "text/csv");
+            res.attachment("quiz_results.csv");
+            return res.send(csv);
+        } catch (err) {
+            console.error("Export quiz_results error:", err);
+            res.status(500).json({ error: "Failed to export quiz results" });
         }
     },
 };

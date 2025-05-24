@@ -1,5 +1,3 @@
-const choice = require("./choice");
-
 module.exports = (sequelize, DataTypes) => {
     const Question = sequelize.define(
         "Question",
@@ -20,16 +18,14 @@ module.exports = (sequelize, DataTypes) => {
             },
         },
         {
-            tableName: "questions", // Specify the table name
-            timestamps: true, // Automatically add createdAt and updatedAt fields
+            tableName: "questions",
+            timestamps: true,
         }
     );
-
     Question.associate = (models) => {
-        Question.hasMany(models.Choice, {
+        Question.hasMany(models.QuizResult, {
             foreignKey: "questionId",
-            as: "choices",
-            onDelete: "CASCADE",
+            as: "quizResults",
         });
     };
 

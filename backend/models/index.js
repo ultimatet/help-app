@@ -36,6 +36,9 @@ fs.readdirSync(__dirname)
   ))
   .forEach(file => {
     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+    if (!model) {
+        console.error(`❌ Failed to load model from file: ${file}`);
+    }
     db[model.name] = model;
   });
 
