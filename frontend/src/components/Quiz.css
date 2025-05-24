@@ -14,6 +14,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
 }
 
 .quiz h2 {
@@ -57,6 +58,7 @@
     transform: translateY(0);
 }
 
+
 .quiz-container .question-text {
     font-size: 2rem;
     margin-bottom: 1rem;
@@ -98,10 +100,7 @@
     padding: 0.75rem 1.5rem;
     background-color: #e57373;
     color: #fff;
-    border: none;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    cursor: pointer;
+
     transition: all 0.3s ease;
 }
 
@@ -173,4 +172,5 @@
 .likert-option input[type="radio"]:hover {
     border-color: #9f7659;
     transform: scale(1.1);
+
 }
