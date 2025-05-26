@@ -10,7 +10,7 @@ const Dashboard = () => {
     const [userRole, setUserRole] = useState(null); // role fetched from backend
     const [questions, setQuestions] = useState([]);
     const [editing, setEditing] = useState(false);
-    const [form, setForm] = useState({ question_text: "", category: "", choices: [] });
+    const [form, setForm] = useState({ question_text: "", category: "" });
     const [error, setError] = useState("");
     const [view, setView] = useState("menu"); // "menu", "edit", "export"
 
@@ -49,25 +49,24 @@ const Dashboard = () => {
     //Fetch questions only if admin
     useEffect(() => {
         if (isAuthenticated && userRole === "admin") {
-            axios.get("http://localhost:5000/question").then((res) => setQuestions(res.data));
+            axios.get("http://localhost:5000/quiz/questions").then((res) => setQuestions(res.data));
         }
     }, [isAuthenticated, userRole]);
 
     const handleEdit = (q) => {
         setEditing(q.id);
         setForm({
-            question_text: q.question_text,
-            category: q.category,
-            choices: q.choices ? q.choices.map((c) => ({ ...c })) : [],
+            question_text: q.text,
+            category: q.domain,
         });
     };
 
     const handleDelete = (id) => {
         axios
-            .delete(`http://localhost:5000/admin/questions/${id}`)
+            .delete(`http://localhost:5000/quiz/questions/${id}`)
             .then(() => {
                 setQuestions(questions.filter((q) => q.id !== id));
-                setForm({ question_text: "", category: "", choices: [] });
+                setForm({ question_text: "", category: "" });
                 setEditing(null);
                 console.log("Question deleted successfully");
             })
@@ -80,22 +79,24 @@ const Dashboard = () => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleChoiceChange = (idx, value) => {
-        const newChoices = [...form.choices];
-        newChoices[idx].choice_text = value;
-        setForm({ ...form, choices: newChoices });
-    };
+    const handleSubmit = (e) => {
+        e.preventDefault(); // Prevent default form submission behavior
 
-    const addChoice = () => {
-        setForm({ ...form, choices: [...form.choices, { choice_text: "" }] });
+        axios
+            .post("http://localhost:5000/quiz/questions", {
+                text: form.question_text,
+                domain: form.category,
+            })
+            .then((res) => {
+                setQuestions([...questions, res.data]);
+                setForm({ question_text: "", category: "" });
+                setEditing(false);
+                console.log("Question added successfully");
+            })
+            .catch((err) => {
+                console.error("Error adding question:", err);
+            });
     };
-
-    const removeChoice = (idx) => {
-        const newChoices = form.choices.filter((_, i) => i !== idx);
-        setForm({ ...form, choices: newChoices });
-    };
-
-    const handleSubmit = (e) => {};
 
     // Export quiz_results as CSV and trigger download
     const handleExport = async () => {
@@ -144,33 +145,9 @@ const Dashboard = () => {
                                         name="category"
                                         value={form.category}
                                         onChange={handleChange}
-                                        placeholder="Category"
+                                        placeholder="Domain"
                                     />
-                                    <div className="dashboard-choices">
-                                        <b>Choices:</b>
-                                        {form.choices.map((c, idx) => (
-                                            <div key={idx} className="choice-container">
-                                                <input
-                                                    value={c.choice_text}
-                                                    onChange={(e) =>
-                                                        handleChoiceChange(idx, e.target.value)
-                                                    }
-                                                    placeholder={`Choice ${idx + 1}`}
-                                                    required
-                                                />
-                                                <button
-                                                    type="button"
-                                                    className="remove-btn"
-                                                    onClick={() => removeChoice(idx)}
-                                                >
-                                                    Remove
-                                                </button>
-                                            </div>
-                                        ))}
-                                        <button type="button" onClick={addChoice}>
-                                            Add Choice
-                                        </button>
-                                    </div>
+
                                     <button type="submit">
                                         {editing ? "Update" : "Add"} Question
                                     </button>
@@ -182,7 +159,6 @@ const Dashboard = () => {
                                                 setForm({
                                                     question_text: "",
                                                     category: "",
-                                                    choices: [],
                                                 });
                                             }}
                                         >
@@ -195,17 +171,13 @@ const Dashboard = () => {
                                 <ul className="dashboard-list">
                                     {questions.map((q) => (
                                         <li key={q.id}>
-                                            <b>{q.question_text}</b> <i>({q.category})</i>
-                                            <ul>
-                                                {q.choices &&
-                                                    q.choices.map((c, i) => (
-                                                        <li key={i}>{c.choice_text}</li>
-                                                    ))}
-                                            </ul>
-                                            <button onClick={() => handleEdit(q)}>Edit</button>
-                                            <button onClick={() => handleDelete(q.id)}>
-                                                Delete
-                                            </button>
+                                            <b>{q.text}</b> <i>({q.domain})</i>
+                                            <div>
+                                                <button onClick={() => handleEdit(q)}>Edit</button>
+                                                <button onClick={() => handleDelete(q.id)}>
+                                                    Delete
+                                                </button>
+                                            </div>
                                         </li>
                                     ))}
                                 </ul>

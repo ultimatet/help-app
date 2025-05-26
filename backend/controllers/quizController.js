@@ -21,19 +21,23 @@ const initializeOutputLookup = async () => {
 initializeOutputLookup();
 
 const quizController = {
-    getQuestions: (req, res) => {
+    getQuestions(req, res) {
         res.json(questions);
     },
 
-    createQuestion: (req, res) => {
-        const { text, category, domain } = req.body;
+    createQuestion(req, res) {
+        const { text, domain } = req.body;
 
-        if (!text || !category || !domain) {
-            return res.status(400).json({ error: "Text, category, and domain are required." });
+        if (!text || !domain) {
+            return res.status(400).json({ error: "Text and domain are required." });
         }
 
-        const newId = questions.length ? Math.max(...questions.map((q) => q.id)) + 1 : 1;
-        const newQuestion = { id: newId, text, category, domain };
+        // Generate new ID in "Q1", "Q2" format
+        const existingIds = questions.map((q) => parseInt(q.id.replace("Q", "")));
+        const newIdNumber = existingIds.length ? Math.max(...existingIds) + 1 : 1;
+        const newId = `Q${newIdNumber}`;
+
+        const newQuestion = { id: newId, text, domain };
 
         questions.push(newQuestion);
 
@@ -46,11 +50,10 @@ const quizController = {
         });
     },
 
-    deleteQuestion: (req, res) => {
+    deleteQuestion(req, res) {
         const { id } = req.params;
-        const questionId = parseInt(id);
 
-        const index = questions.findIndex((q) => q.id === questionId);
+        const index = questions.findIndex((q) => q.id === id);
         if (index === -1) {
             return res.status(404).json({ error: "Question not found" });
         }
@@ -62,11 +65,11 @@ const quizController = {
                 console.error("Failed to delete question:", err);
                 return res.status(500).json({ error: "Failed to delete question" });
             }
-            return res.json({ message: `Question ${questionId} deleted successfully.` });
+            return res.json({ message: `Question ${id} deleted successfully.` });
         });
     },
 
-    processAnswers: (answers) => {
+    processAnswers(answers) {
         const scores = {};
         const formattedAnswers = [];
 
@@ -104,7 +107,7 @@ const quizController = {
         return { scores, formattedAnswers };
     },
 
-    buildReport: (scores) => {
+    buildReport(scores) {
         const report = {};
         for (let [domain, score] of Object.entries(scores)) {
             const buckets = outputLookup[domain] || [];
@@ -125,7 +128,7 @@ const quizController = {
         return report;
     },
 
-    submitQuiz: async (req, res) => {
+    async submitQuiz(req, res) {
         const transaction = await sequelize.transaction();
 
         try {
@@ -184,7 +187,7 @@ const quizController = {
         }
     },
 
-    getUserResults: async (req, res) => {
+    async getUserResults(req, res) {
         try {
             const { userId } = req.params;
 
