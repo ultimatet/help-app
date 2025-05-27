@@ -22,13 +22,39 @@ const Profile = () => {
     const [selectedReportIdx, setSelectedReportIdx] = useState(0); // Index of report to display
 
     useEffect(() => {
+        async function fetchUserRole() {
+            // Import your supabase client
+            const { supabase } = await import("../lib/supabaseClient");
+            // Get the current user from Supabase auth
+            const {
+                data: { user },
+            } = await supabase.auth.getUser();
+            if (!user) {
+                console.warn("No user logged in");
+                return;
+            }
+            // Fetch the user's role from the users table
+            const { data, error } = await supabase
+                .from("users")
+                .select("role")
+                .eq("id", user.id)
+                .single();
+            if (error) {
+                console.error("Failed to fetch user role from Supabase:", error);
+            } else {
+                console.log("User role:", data.role);
+                // You can set state here if needed
+            }
+        }
+        fetchUserRole();
+    }, []);
+
+    useEffect(() => {
         const fetchRole = async () => {
             if (isAuthenticated && user?.email) {
                 try {
                     const encodedEmail = encodeURIComponent(user.email);
-                    const response = await fetch(
-                        `http://localhost:5000/user/role/${encodedEmail}`
-                    );
+                    const response = await fetch(`http://localhost:5000/user/role/${encodedEmail}`);
                     const data = await response.json();
 
                     if (response.ok) {

@@ -13,21 +13,29 @@ const Quiz = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    // 1) Fetch questions on mount
+    // 1) Fetch questions on mount from Supabase
     useEffect(() => {
-        fetch("/question/")
-            .then((res) => res.json())
-            .then((data) => {
+        async function fetchQuestions() {
+            // Import your supabase client
+            const { supabase } = await import("../lib/supabaseClient");
+            const { data, error } = await supabase
+                .from("questions")
+                .select("id, question_text, category");
+            if (error) {
+                console.error("Failed to fetch quiz questions from Supabase:", error);
+                setQuestions([]);
+            } else {
                 // Normalize to always use q.id as a string and q.category, and set q.question_text for frontend compatibility
                 const normalized = data.map((q) => ({
                     ...q,
-                    id: typeof q.id === "number" ? String(q.id) : q.id, // ensure id is string (matches DB integer)
+                    id: typeof q.id === "number" ? String(q.id) : q.id,
                     question_text: q.question_text || q.text || q.questionText || q.prompt || "",
                     category: q.category || q.domain || "",
                 }));
                 setQuestions(normalized);
-            })
-            .catch((err) => console.error("Failed to fetch quiz questions:", err));
+            }
+        }
+        fetchQuestions();
     }, []);
 
     // 2) Record an answer (1–5)

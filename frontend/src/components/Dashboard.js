@@ -14,6 +14,35 @@ const Dashboard = () => {
     const [error, setError] = useState("");
     const [view, setView] = useState("menu"); // "menu", "edit", "export"
 
+    // Initial fetch of user role from supabase
+    useEffect(() => {
+            async function fetchUserRole() {
+                // Import your supabase client
+                const { supabase } = await import("../lib/supabaseClient");
+                // Get the current user from Supabase auth
+                const {
+                    data: { user },
+                } = await supabase.auth.getUser();
+                if (!user) {
+                    console.warn("No user logged in");
+                    return;
+                }
+                // Fetch the user's role from the users table
+                const { data, error } = await supabase
+                    .from("users")
+                    .select("role")
+                    .eq("id", user.id)
+                    .single();
+                if (error) {
+                    console.error("Failed to fetch user role from Supabase:", error);
+                } else {
+                    console.log("User role:", data.role);
+                    // You can set state here if needed
+                }
+            }
+            fetchUserRole();
+        }, []);
+
     // Fetch user role from backend after authentication
     useEffect(() => {
         const fetchRole = async () => {

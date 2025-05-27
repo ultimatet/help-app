@@ -56,7 +56,7 @@ function App() {
     return (
         <div className="App">
             <Header />
-            <ScrollToTop /> 
+            <ScrollToTop />
             <div className="container">
                 <Routes>
                     <Route path="/" element={<Navigate to="/home" replace />} />
