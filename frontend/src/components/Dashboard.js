@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import FileSaver from "file-saver";
+import supabase from "../lib/supabaseClient"; 
 import "./Dashboard.css";
 
 const Dashboard = () => {
@@ -17,8 +18,6 @@ const Dashboard = () => {
     // Initial fetch of user role from supabase
     useEffect(() => {
             async function fetchUserRole() {
-                // Import your supabase client
-                const { supabase } = await import("../lib/supabaseClient");
                 // Get the current user from Supabase auth
                 const {
                     data: { user },

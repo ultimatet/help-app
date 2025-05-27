@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import supabase from "../lib/supabaseClient";
 import Report from "./Report";
 import "./Quiz.css";
 
@@ -17,7 +18,6 @@ const Quiz = () => {
     useEffect(() => {
         async function fetchQuestions() {
             // Import your supabase client
-            const { supabase } = await import("../lib/supabaseClient");
             const { data, error } = await supabase
                 .from("questions")
                 .select("id, question_text, category");

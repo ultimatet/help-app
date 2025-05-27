@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Radar } from "react-chartjs-2";
+import supabase from "../lib/supabaseClient"; 
 import {
     Chart as ChartJS,
     RadialLinearScale,
@@ -23,8 +24,6 @@ const Profile = () => {
 
     useEffect(() => {
         async function fetchUserRole() {
-            // Import your supabase client
-            const { supabase } = await import("../lib/supabaseClient");
             // Get the current user from Supabase auth
             const {
                 data: { user },
