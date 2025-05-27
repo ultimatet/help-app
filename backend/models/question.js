@@ -22,12 +22,6 @@ module.exports = (sequelize, DataTypes) => {
             timestamps: true,
         }
     );
-    Question.associate = (models) => {
-        Question.hasMany(models.QuizResult, {
-            foreignKey: "questionId",
-            as: "quizResults",
-        });
-    };
 
     return Question;
 };
