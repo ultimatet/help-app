@@ -49,21 +49,21 @@ const Dashboard = () => {
     //Fetch questions only if admin
     useEffect(() => {
         if (isAuthenticated && userRole === "admin") {
-            axios.get("http://localhost:5000/quiz/questions").then((res) => setQuestions(res.data));
+            axios.get("http://localhost:5000/question").then((res) => setQuestions(res.data));
         }
     }, [isAuthenticated, userRole]);
 
     const handleEdit = (q) => {
         setEditing(q.id);
         setForm({
-            question_text: q.text,
-            category: q.domain,
+            question_text: q.question_text, // Use DB field
+            category: q.category, // Use DB field
         });
     };
 
     const handleDelete = (id) => {
         axios
-            .delete(`http://localhost:5000/quiz/questions/${id}`)
+            .delete(`http://localhost:5000/admin/questions/${id}`)
             .then(() => {
                 setQuestions(questions.filter((q) => q.id !== id));
                 setForm({ question_text: "", category: "" });
@@ -80,22 +80,40 @@ const Dashboard = () => {
     };
 
     const handleSubmit = (e) => {
-        e.preventDefault(); // Prevent default form submission behavior
-
-        axios
-            .post("http://localhost:5000/quiz/questions", {
-                text: form.question_text,
-                domain: form.category,
-            })
-            .then((res) => {
-                setQuestions([...questions, res.data]);
-                setForm({ question_text: "", category: "" });
-                setEditing(false);
-                console.log("Question added successfully");
-            })
-            .catch((err) => {
-                console.error("Error adding question:", err);
-            });
+        e.preventDefault();
+        if (editing) {
+            // Update existing question
+            axios
+                .put(`http://localhost:5000/admin/questions/${editing}`, {
+                    question_text: form.question_text,
+                    category: form.category,
+                })
+                .then((res) => {
+                    setQuestions(questions.map((q) => (q.id === editing ? res.data : q)));
+                    setForm({ question_text: "", category: "" });
+                    setEditing(false);
+                    console.log("Question updated successfully");
+                })
+                .catch((err) => {
+                    console.error("Error updating question:", err);
+                });
+        } else {
+            // Add new question
+            axios
+                .post("http://localhost:5000/admin/questions", {
+                    question_text: form.question_text,
+                    category: form.category,
+                })
+                .then((res) => {
+                    setQuestions([...questions, res.data]);
+                    setForm({ question_text: "", category: "" });
+                    setEditing(false);
+                    console.log("Question added successfully");
+                })
+                .catch((err) => {
+                    console.error("Error adding question:", err);
+                });
+        }
     };
 
     // Export quiz_results as CSV and trigger download
@@ -171,7 +189,7 @@ const Dashboard = () => {
                                 <ul className="dashboard-list">
                                     {questions.map((q) => (
                                         <li key={q.id}>
-                                            <b>{q.text}</b> <i>({q.domain})</i>
+                                            <b>{q.question_text}</b> <i>({q.category})</i>
                                             <div>
                                                 <button onClick={() => handleEdit(q)}>Edit</button>
                                                 <button onClick={() => handleDelete(q.id)}>

@@ -1,22 +1,15 @@
-const { Question, Choice, QuizResult, User } = require("../models");
+const { Question, QuizResult, User } = require("../models");
 const { Parser } = require("json2csv");
 const fs = require("fs");
 
 const adminController = {
     async createQuestion(req, res) {
-        console.log("Received POST request for creating question");
-        const { question_text, category, choices } = req.body;
         try {
-            const newQuestion = await Question.create(
-                {
-                    question_text,
-                    category,
-                    choices,
-                },
-                {
-                    include: [{ model: Choice, as: "choices" }],
-                }
-            );
+            const { question_text, category } = req.body;
+            if (!question_text) {
+                return res.status(400).json({ error: "question_text is required" });
+            }
+            const newQuestion = await Question.create({ question_text, category });
             res.status(201).json(newQuestion);
         } catch (error) {
             console.error("Error creating question:", error);
@@ -26,33 +19,16 @@ const adminController = {
 
     async updateQuestion(req, res) {
         const { id } = req.params;
-        const { question_text, category, points, choices } = req.body;
-
+        const { question_text, category } = req.body;
         try {
-            const question = await Question.findByPk(id, {
-                include: [{ model: Choice, as: "choices" }],
-            });
-
+            const question = await Question.findByPk(id);
             if (!question) {
                 return res.status(404).json({ error: "Question not found" });
             }
-
-            // Update main fields
-            question.question_text = question_text;
-            question.category = category;
-            question.points = points;
+            if (question_text !== undefined) question.question_text = question_text;
+            if (category !== undefined) question.category = category;
             await question.save();
-
-            // Replace existing choices
-            await Choice.destroy({ where: { questionId: question.id } });
-            const newChoices = await Choice.bulkCreate(
-                choices.map((choice) => ({
-                    ...choice,
-                    questionId: question.id,
-                }))
-            );
-
-            res.status(200).json({ question, choices: newChoices });
+            res.status(200).json(question);
         } catch (error) {
             console.error("Error updating question:", error);
             res.status(500).json({ error: "Internal server error" });

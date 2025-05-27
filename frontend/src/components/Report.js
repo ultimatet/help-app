@@ -25,7 +25,7 @@ const Report = ({ report, onRetake }) => {
 
                 // Step 2: Get quiz results using the user ID
                 const resultsResponse = await fetch(
-                    `http://localhost:5000/quiz/results/${userData.id}`
+                    `http://localhost:5000/question/results/${userData.id}`
                 );
                 const resultsData = await resultsResponse.json();
 

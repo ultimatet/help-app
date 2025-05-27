@@ -58,7 +58,7 @@ const Profile = () => {
                     if (!userData.id) return;
                     // Get up to 3 most recent quiz results
                     const resultsResponse = await fetch(
-                        `http://localhost:5000/quiz/results/${userData.id}`
+                        `http://localhost:5000/question/results/${userData.id}`
                     );
                     const resultsData = await resultsResponse.json();
                     if (resultsData.results && resultsData.results.length > 0) {

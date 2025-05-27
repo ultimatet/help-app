@@ -15,9 +15,18 @@ const Quiz = () => {
 
     // 1) Fetch questions on mount
     useEffect(() => {
-        fetch("/quiz/questions")
+        fetch("/question/")
             .then((res) => res.json())
-            .then(setQuestions)
+            .then((data) => {
+                // Normalize to always use q.id as a string and q.category, and set q.question_text for frontend compatibility
+                const normalized = data.map((q) => ({
+                    ...q,
+                    id: typeof q.id === "number" ? String(q.id) : q.id, // ensure id is string (matches DB integer)
+                    question_text: q.question_text || q.text || q.questionText || q.prompt || "",
+                    category: q.category || q.domain || "",
+                }));
+                setQuestions(normalized);
+            })
             .catch((err) => console.error("Failed to fetch quiz questions:", err));
     }, []);
 
@@ -48,7 +57,7 @@ const Quiz = () => {
                 email: user.email, // Using email from Auth0 user
                 answers,
             };
-            const res = await fetch("/quiz/submit", {
+            const res = await fetch("question/submit", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),
@@ -85,7 +94,7 @@ const Quiz = () => {
                 <h2>
                     Question {step + 1} of {questions.length}
                 </h2>
-                <p className="question-text">{q.text}</p>
+                <p className="question-text">{q.question_text}</p>
 
                 <div className="likert-scale">
                     {[1, 2, 3, 4, 5].map((n) => (

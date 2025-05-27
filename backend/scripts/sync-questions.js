@@ -13,9 +13,7 @@ async function syncQuestions() {
     const values = {
       id,
       category:     q.domain,
-      question_text:q.text,
-      answer_text:  q.answer_text || '',
-      points:       q.points || 0
+      question_text:q.text
     };
     // Upsert: insert if new, update if exists
     await Question.upsert(values);
