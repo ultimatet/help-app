@@ -18,19 +18,11 @@ const Dashboard = () => {
     // Initial fetch of user role from supabase
     useEffect(() => {
             async function fetchUserRole() {
-                // Get the current user from Supabase auth
-                const {
-                    data: { user },
-                } = await supabase.auth.getUser();
-                if (!user) {
-                    console.warn("No user logged in");
-                    return;
-                }
                 // Fetch the user's role from the users table
                 const { data, error } = await supabase
                     .from("users")
                     .select("role")
-                    .eq("id", user.id)
+                    .eq("auth0_email", user.email)
                     .single();
                 if (error) {
                     console.error("Failed to fetch user role from Supabase:", error);
@@ -40,7 +32,7 @@ const Dashboard = () => {
                 }
             }
             fetchUserRole();
-        }, []);
+        }, [user.email]);
 
     // Fetch user role from backend after authentication
     useEffect(() => {

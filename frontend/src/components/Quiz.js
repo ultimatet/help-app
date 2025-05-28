@@ -33,6 +33,7 @@ const Quiz = () => {
                     category: q.category || q.domain || "",
                 }));
                 setQuestions(normalized);
+                console.log("Fetched questions:", normalized);
             }
         }
         fetchQuestions();
@@ -60,24 +61,32 @@ const Quiz = () => {
         }
 
         setLoading(true);
+
         try {
-            const payload = {
-                email: user.email, // Using email from Auth0 user
-                answers,
-            };
-            const res = await fetch("question/submit", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-            });
-            const { report } = await res.json();
-            setReport(report);
+            const { data, error } = await supabase
+                .from("quiz_results") // use your actual results table name
+                .insert([
+                    {
+                        auth0_email: user.email,
+                        answers,
+                        created_at: new Date().toISOString(), // optional, if your table has a `created_at` column
+                    },
+                ]);
+
+            if (error) {
+                console.error("Failed to submit quiz to Supabase:", error);
+                return;
+            }
+
+            console.log("Quiz result saved:", data);
+
         } catch (err) {
-            console.error("Quiz submission failed:", err);
+            console.error("Unexpected error during quiz submission:", err);
         } finally {
             setLoading(false);
         }
     };
+    
 
     // 5) Render states
     if (!questions.length) return <div>Loading questions…</div>;
