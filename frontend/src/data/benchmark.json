@@ -1,0 +1,74 @@
+[
+  {
+    "Area": "Talking Support",
+    "ranges": [
+      {"min": null, "max": 4.24, "label": "Lower", "meaning": "You might not feel very confident talking about death yet—and that's completely okay.", "action": "Try joining a group or workshop where people talk openly about end-of-life topics. It's a great way to build comfort."},
+      {"min": 4.24, "max": 6.68, "label": "Similar", "meaning": "You're about as comfortable talking about death as most people. That's a solid place to be.", "action": "Keep having open conversations when the opportunity comes up—it helps create a more supportive space for everyone."},
+      {"min": 6.68, "max": null, "label": "Higher", "meaning": "You seem really comfortable talking about end-of-life matters, which is a real strength.", "action": "Use that comfort to gently support others who may find these conversations difficult. You can help make these talks feel safer."}
+    ]
+  },
+  {
+    "Area": "Hands-on Support",
+    "ranges": [
+      {"min": null, "max": 3.35, "label": "Lower", "meaning": "You may not have had much experience helping someone physically at the end of life. That's very common.", "action": "You could look into volunteering, or even just learn basic care skills—it can help build confidence over time."},
+      {"min": 3.35, "max": 5.89, "label": "Similar", "meaning": "You've had some hands-on experience, about the same as most people.", "action": "Share what you've learned, and look for chances to build on your skills when you feel ready."},
+      {"min": 5.89, "max": null, "label": "Higher", "meaning": "You've clearly had experience helping someone directly, and that's really valuable.", "action": "Consider mentoring others or getting involved in your community's end-of-life care efforts. Your experience can make a difference."}
+    ]
+  },
+  {
+    "Area": "Practical Knowledge (Overall)",
+    "ranges": [
+      {"min": null, "max": 3.94, "label": "Lower", "meaning": "You might not feel super confident supporting someone through dying yet, and that's totally normal.", "action": "Start small—maybe offer practical help to someone or learn more about what's involved in end-of-life care."},
+      {"min": 3.94, "max": 6.14, "label": "Similar", "meaning": "You've got a solid base of experience, right in line with others.", "action": "Keep building on what you know, and don't hesitate to step in when you see someone needs support."},
+      {"min": 6.14, "max": null, "label": "Higher", "meaning": "You've got strong practical knowledge. You know what to do and how to be there for someone.", "action": "Think about sharing what you know—others could really benefit from your experience."}
+    ]
+  },
+  {
+    "Area": "Experience",
+    "ranges": [
+      {"min": null, "max": 4.75, "label": "Lower", "meaning": "You may not have had many personal or professional experiences with death or dying.", "action": "Consider listening to others' stories, or gently reflect on your own feelings. That's a good starting point."},
+      {"min": 4.75, "max": 7.05, "label": "Similar", "meaning": "Your experiences are about average—enough to give you a sense of what death and dying can be like.", "action": "Stay open to learning from your own experiences and those around you. It builds wisdom."},
+      {"min": 7.05, "max": null, "label": "Higher", "meaning": "You've had more exposure to death and dying than most. That gives you valuable perspective.", "action": "You might find yourself naturally supporting others—your lived experience is a real asset."}
+    ]
+  },
+  {
+    "Area": "Knowledge",
+    "ranges": [
+      {"min": null, "max": 2.50, "label": "Lower", "meaning": "You might not feel very informed about end-of-life care or services right now.", "action": "Learning even just a bit more—like what options exist—can help you feel more prepared and confident."},
+      {"min": 2.50, "max": 5.08, "label": "Similar", "meaning": "You've got a good, solid base of knowledge—enough to understand what's going on.", "action": "Keep asking questions and exploring. It'll help you and those you care about."},
+      {"min": 5.08, "max": null, "label": "Higher", "meaning": "You know quite a lot about death-related matters. That's a powerful tool.", "action": "Consider helping others understand what you've learned—many people are looking for someone who can guide them."}
+    ]
+  },
+  {
+    "Area": "Community Support 1",
+    "ranges": [
+      {"min": null, "max": 2.91, "label": "Lower", "meaning": "You might feel like your community doesn't offer much support around death and dying.", "action": "Think about ways you can connect with others—there may be more support out there than it seems."},
+      {"min": 2.91, "max": 5.39, "label": "Similar", "meaning": "Your experience with community support is similar to most people's.", "action": "Look for ways to strengthen those ties—community can be a big help during difficult times."},
+      {"min": 5.39, "max": null, "label": "Higher", "meaning": "You feel like your community is pretty supportive, which is wonderful.", "action": "Help keep that support going by getting involved and welcoming others in."}
+    ]
+  },
+  {
+    "Area": "Community Support 2",
+    "ranges": [
+      {"min": null, "max": 3.88, "label": "Lower", "meaning": "It might feel like your community isn't very involved in end-of-life care.", "action": "You could explore local initiatives or even start conversations that help get more people engaged."},
+      {"min": 3.88, "max": 6.24, "label": "Similar", "meaning": "Your community's involvement seems about average.", "action": "Keep encouraging participation—it helps everyone feel less alone."},
+      {"min": 6.24, "max": null, "label": "Higher", "meaning": "You feel your community really steps up when it comes to end-of-life care.", "action": "You can help others feel confident joining in too—your example can inspire more engagement."}
+    ]
+  },
+  {
+    "Area": "Community (Overall)",
+    "ranges": [
+      {"min": null, "max": 3.50, "label": "Lower", "meaning": "You might not feel very supported by your community around death-related matters.", "action": "See if there are community groups or events that can help build that support. Small actions make a big difference."},
+      {"min": 3.50, "max": 5.70, "label": "Similar", "meaning": "Your overall community score is similar to others'.", "action": "Keep showing up and being part of the conversation—it helps the whole community grow stronger."},
+      {"min": 5.70, "max": null, "label": "Higher", "meaning": "You see your community as supportive and engaged around dying and grieving. That's a real strength.", "action": "Share what's working—others might be looking for ideas to build similar support in their own communities."}
+    ]
+  },
+  {
+    "Area": "Death Literacy Index (Overall)",
+    "ranges": [
+      {"min": null, "max": 3.86, "label": "Lower", "meaning": "You may not feel very comfortable or knowledgeable about death yet, but that can change with time.", "action": "Start with one step—talk to someone, read something, or reflect on what death means to you. It all adds up."},
+      {"min": 3.86, "max": 5.80, "label": "Similar", "meaning": "You're in a similar place to most people—there's a good base, and room to grow.", "action": "Keep learning, talking, and staying open—it's a journey that grows with you."},
+      {"min": 5.80, "max": null, "label": "Higher", "meaning": "You seem to have a strong level of comfort, knowledge, and experience. That's a real gift.", "action": "Think about how you can support others on their journey—you have a lot to offer."}
+    ]
+  }
+]

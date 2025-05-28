@@ -62,23 +62,68 @@ const Quiz = () => {
 
         setLoading(true);
         try {
-            const payload = {
-                email: user.email, // Using email from Auth0 user
-                answers,
-            };
-            const res = await fetch("question/submit", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
+            // 1. Fetch userId from Supabase using the email
+            const { data: userData, error: userError } = await supabase
+                .from("users")
+                .select("id")
+                .eq("auth0_email", user.email)
+                .single();
+
+            if (userError || !userData?.id) {
+                throw new Error("User not found in Supabase: " + userError?.message);
+            }
+
+            const userId = userData.id;
+
+            // 2. Transform answers from { qid: value } to array of { questionId, selectedValue }
+            const transformedAnswers = Object.entries(answers).map(
+                ([questionId, selectedValue]) => ({
+                    questionId,
+                    selectedValue,
+                })
+            );
+
+            // 3. Compute category scores (simple average per category for now)
+            const categoryScores = {};
+            questions.forEach((q) => {
+                const val = answers[q.id];
+                if (val) {
+                    categoryScores[q.category] = categoryScores[q.category] || [];
+                    categoryScores[q.category].push(val);
+                }
             });
-            const { report } = await res.json();
-            setReport(report);
+
+            Object.keys(categoryScores).forEach((cat) => {
+                const values = categoryScores[cat];
+                const average = values.reduce((sum, val) => sum + val, 0) / values.length;
+                categoryScores[cat] = Number(average.toFixed(2));
+            });
+
+            // 4. Submit to Supabase `quiz_results` table
+            const { data: resultData, error: resultError } = await supabase
+                .from("quiz_results")
+                .insert([
+                    {
+                        userId,
+                        answers: transformedAnswers,
+                        categoryScores,
+                    },
+                ])
+                .select();
+
+            if (resultError) {
+                throw new Error("Failed to insert quiz result: " + resultError.message);
+            }
+
+            console.log("Quiz result submitted:", resultData);
+            setReport({ categoryScores }); // or use resultData[0] if you want full result
         } catch (err) {
             console.error("Quiz submission failed:", err);
         } finally {
             setLoading(false);
         }
     };
+    
 
     // 5) Render states
     if (!questions.length) return <div>Loading questions…</div>;
