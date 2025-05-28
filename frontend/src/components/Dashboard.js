@@ -295,10 +295,6 @@ const Dashboard = () => {
                                     <strong>createdAt / updatedAt</strong>: Timestamps indicating
                                     when each quiz result was recorded or last modified.
                                 </li>
-                                <li>
-                                    <strong>user_email</strong>: The email of the user who submitted
-                                    the quiz, used to associate results with individual users.
-                                </li>
                             </ul>
                             <p>
                                 This dataset enables researchers and administrators to analyze
