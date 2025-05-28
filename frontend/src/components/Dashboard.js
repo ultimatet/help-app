@@ -27,8 +27,8 @@ const Dashboard = () => {
             if (error) {
                 console.error("Failed to fetch user role from Supabase:", error);
             } else {
+                setUserRole(data.role);
                 console.log("User role:", data.role);
-                // You can set state here if needed
             }
         }
         fetchUserRole();
