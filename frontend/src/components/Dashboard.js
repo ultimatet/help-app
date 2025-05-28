@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import FileSaver from "file-saver";
-import supabase from "../lib/supabaseClient"; 
+import supabase from "../lib/supabaseClient";
 import "./Dashboard.css";
 
 const Dashboard = () => {
@@ -17,22 +17,22 @@ const Dashboard = () => {
 
     // Initial fetch of user role from supabase
     useEffect(() => {
-            async function fetchUserRole() {
-                // Fetch the user's role from the users table
-                const { data, error } = await supabase
-                    .from("users")
-                    .select("role")
-                    .eq("auth0_email", user.email)
-                    .single();
-                if (error) {
-                    console.error("Failed to fetch user role from Supabase:", error);
-                } else {
-                    console.log("User role:", data.role);
-                    // You can set state here if needed
-                }
+        async function fetchUserRole() {
+            // Fetch the user's role from the users table
+            const { data, error } = await supabase
+                .from("users")
+                .select("role")
+                .eq("auth0_email", user.email)
+                .single();
+            if (error) {
+                console.error("Failed to fetch user role from Supabase:", error);
+            } else {
+                console.log("User role:", data.role);
+                // You can set state here if needed
             }
-            fetchUserRole();
-        }, [user.email]);
+        }
+        fetchUserRole();
+    }, [user.email]);
 
     // Fetch user role from backend after authentication
     useEffect(() => {
@@ -136,12 +136,43 @@ const Dashboard = () => {
         }
     };
 
-    // Export quiz_results as CSV and trigger download
+    // Export quiz_results as CSV and trigger download (from Supabase)
     const handleExport = async () => {
         try {
-            const response = await fetch("http://localhost:5000/admin/export-quiz-results");
-            if (!response.ok) throw new Error("Failed to fetch quiz results");
-            const blob = await response.blob();
+            // Fetch all quiz results from Supabase
+            let { data: results, error } = await supabase
+                .from("quiz_results")
+                .select("id, userId, answers, categoryScores, createdAt, updatedAt");
+            if (error) throw new Error("Failed to fetch quiz results: " + error.message);
+            if (!results || results.length === 0) throw new Error("No quiz results found");
+
+            // Convert to CSV (comma-separated, JSON fields properly quoted for Excel)
+            const header = ["id", "userId", "answers", "categoryScores", "createdAt", "updatedAt"];
+            function escapeForCSV(val) {
+                if (typeof val === "object") val = JSON.stringify(val);
+                if (typeof val === "string") {
+                    // Escape double quotes by doubling them
+                    val = val.replace(/"/g, '""');
+                    return `"${val}"`;
+                }
+                return val;
+            }
+            const csv = [
+                header.join(","),
+                ...results.map((row) =>
+                    [
+                        row.id,
+                        row.userId,
+                        escapeForCSV(row.answers),
+                        escapeForCSV(row.categoryScores),
+                        row.createdAt,
+                        row.updatedAt,
+                    ].join(",")
+                ),
+            ].join("\r\n");
+
+            // Download
+            const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
             FileSaver.saveAs(blob, "quiz_results.csv");
         } catch (err) {
             alert("Export failed: " + err.message);
