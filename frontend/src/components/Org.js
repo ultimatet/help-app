@@ -21,7 +21,7 @@ const Org = () => {
                     <h2>What HELP Offers</h2>
                     <ul>
                         <li>Confidential assessments for staff or community members</li>
-                        <li>Personalized PDF reports with insights and guidance</li>
+                        <li>Personalized reports with insights and guidance</li>
                         <li>Data export options for strategic planning</li>
                     </ul>
                 </section>

@@ -38,7 +38,7 @@ const Profile = () => {
             }
         }
         fetchUserRole();
-    }, [user.email]);
+    }, [user.email, user]);
 
 
     useEffect(() => {
@@ -168,7 +168,7 @@ const Profile = () => {
                     <div className="profile">
                         <h2>{user.name}</h2>
                         <p>{user.email}</p>
-                        <p>Role: {userRole}</p>
+                        {/* <p>Role: {userRole}</p> */}
                     </div>
                     <div className="report-container">
                         <div className="report-card">
