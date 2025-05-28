@@ -41,26 +41,26 @@ const Profile = () => {
     }, [user]);
 
 
-    useEffect(() => {
-        const fetchRole = async () => {
-            if (isAuthenticated && user?.email) {
-                try {
-                    const encodedEmail = encodeURIComponent(user.email);
-                    const response = await fetch(`http://localhost:5000/user/role/${encodedEmail}`);
-                    const data = await response.json();
+    // useEffect(() => {
+    //     const fetchRole = async () => {
+    //         if (isAuthenticated && user?.email) {
+    //             try {
+    //                 const encodedEmail = encodeURIComponent(user.email);
+    //                 const response = await fetch(`http://localhost:5000/user/role/${encodedEmail}`);
+    //                 const data = await response.json();
 
-                    if (response.ok) {
-                        setUserRole(data.role);
-                    } else {
-                        console.error("Error fetching role:", data.error);
-                    }
-                } catch (error) {
-                    console.error("API error:", error);
-                }
-            }
-        };
-        fetchRole();
-    }, [isAuthenticated, user]);
+    //                 if (response.ok) {
+    //                     setUserRole(data.role);
+    //                 } else {
+    //                     console.error("Error fetching role:", data.error);
+    //                 }
+    //             } catch (error) {
+    //                 console.error("API error:", error);
+    //             }
+    //         }
+    //     };
+    //     fetchRole();
+    // }, [isAuthenticated, user]);
 
     // Fetch up to 3 most recent reports for the user
     useEffect(() => {
