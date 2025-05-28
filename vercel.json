@@ -15,7 +15,11 @@
   ],
   "routes": [
     {
-      "src": "/(user|admin|question|profile|test)(.*)",
+      "src": "/(user|admin|question|profile|test|api)(.*)",
+      "dest": "/backend/server.js"
+    },
+    {
+      "src": "/",
       "dest": "/backend/server.js"
     },
     {
