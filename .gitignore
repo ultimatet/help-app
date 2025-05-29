@@ -32,3 +32,4 @@ backend/models/.env
 
 
 backend/.env
+.vercel

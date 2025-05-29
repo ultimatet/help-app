@@ -63,17 +63,14 @@ const About = () => {
 
                 <section className="about-block" id="who-is-it-for">
                     <h2>Who is This For?</h2>
-                    <p>
-                        This platform is designed for:
-                        <ul>
-                            <li>Individuals curious or concerned about end-of-life planning</li>
-                            <li>Families looking to prepare or support one another</li>
-                            <li>Health and community workers engaging with palliative care</li>
-                            <li>
-                                Educators, researchers, and organisations focused on public health
-                            </li>
-                        </ul>
-                    </p>
+                    <p>This platform is designed for: </p>
+                    <ul>
+                        <li>Individuals curious or concerned about end-of-life planning</li>
+                        <li>Families looking to prepare or support one another</li>
+                        <li>Health and community workers engaging with palliative care</li>
+                        <li>Educators, researchers, and organisations focused on public health</li>
+                    </ul>
+
                     <p>
                         Whether you're just starting to think about these issues or already deeply
                         involved, this tool offers guidance, reflection, and a path forward.

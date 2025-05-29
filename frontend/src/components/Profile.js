@@ -63,32 +63,32 @@ const Profile = () => {
     // }, [isAuthenticated, user]);
 
     // Fetch up to 3 most recent reports for the user
-    useEffect(() => {
-        const fetchReports = async () => {
-            if (isAuthenticated && user?.email) {
-                try {
-                    const encodedEmail = encodeURIComponent(user.email);
-                    // Get user ID
-                    const userResponse = await fetch(
-                        `http://localhost:5000/user/id/${encodedEmail}`
-                    );
-                    const userData = await userResponse.json();
-                    if (!userData.id) return;
-                    // Get up to 3 most recent quiz results
-                    const resultsResponse = await fetch(
-                        `http://localhost:5000/question/results/${userData.id}`
-                    );
-                    const resultsData = await resultsResponse.json();
-                    if (resultsData.results && resultsData.results.length > 0) {
-                        setReports(resultsData.results.slice(0, 3));
-                    }
-                } catch (err) {
-                    console.error("Error fetching reports:", err);
-                }
-            }
-        };
-        fetchReports();
-    }, [isAuthenticated, user]);
+    // useEffect(() => {
+    //     const fetchReports = async () => {
+    //         if (isAuthenticated && user?.email) {
+    //             try {
+    //                 const encodedEmail = encodeURIComponent(user.email);
+    //                 // Get user ID
+    //                 const userResponse = await fetch(
+    //                     `http://localhost:5000/user/id/${encodedEmail}`
+    //                 );
+    //                 const userData = await userResponse.json();
+    //                 if (!userData.id) return;
+    //                 // Get up to 3 most recent quiz results
+    //                 const resultsResponse = await fetch(
+    //                     `http://localhost:5000/question/results/${userData.id}`
+    //                 );
+    //                 const resultsData = await resultsResponse.json();
+    //                 if (resultsData.results && resultsData.results.length > 0) {
+    //                     setReports(resultsData.results.slice(0, 3));
+    //                 }
+    //             } catch (err) {
+    //                 console.error("Error fetching reports:", err);
+    //             }
+    //         }
+    //     };
+    //     fetchReports();
+    // }, [isAuthenticated, user]);
 
     // Color palettes for each domain (to match Report.js)
     const domainColors = [

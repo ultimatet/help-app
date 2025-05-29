@@ -22,29 +22,29 @@ const Header = () => {
         return () => window.removeEventListener("scroll", handleScroll);
     }, [scrolled]);
 
-    useEffect(() => {
-            const fetchRole = async () => {
-                if (isAuthenticated && user?.email) {
-                    try {
-                        const encodedEmail = encodeURIComponent(user.email); // handle @
-                        const response = await fetch(
-                            `http://localhost:5000/user/role/${encodedEmail}`
-                        );
-                        const data = await response.json();
+    // useEffect(() => {
+    //         const fetchRole = async () => {
+    //             if (isAuthenticated && user?.email) {
+    //                 try {
+    //                     const encodedEmail = encodeURIComponent(user.email); // handle @
+    //                     const response = await fetch(
+    //                         `http://localhost:5000/user/role/${encodedEmail}`
+    //                     );
+    //                     const data = await response.json();
     
-                        if (response.ok) {
-                            setUserRole(data.role);
-                        } else {
-                            console.error("Error fetching role:", data.error);
-                        }
-                    } catch (error) {
-                        console.error("API error:", error);
-                    }
-                }
-            };
+    //                     if (response.ok) {
+    //                         setUserRole(data.role);
+    //                     } else {
+    //                         console.error("Error fetching role:", data.error);
+    //                     }
+    //                 } catch (error) {
+    //                     console.error("API error:", error);
+    //                 }
+    //             }
+    //         };
     
-            fetchRole();
-        }, [isAuthenticated, user]);
+    //         fetchRole();
+    //     }, [isAuthenticated, user]);
 
     const handleLogin = () => {
         loginWithRedirect({
