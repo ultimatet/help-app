@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+
 import supabase from "../lib/supabaseClient";
 import Report from "./Report";
 import "./Quiz.css";
 
 const Quiz = () => {
+
     const { user } = useAuth0();
     const [questions, setQuestions] = useState([]);
     const [answers, setAnswers] = useState({});
@@ -142,6 +144,7 @@ const Quiz = () => {
     const q = questions[step];
     const selected = answers[q.id] || 0;
 
+
     return (
         <div className="quiz-container">
             <div className="quiz">
@@ -188,6 +191,7 @@ const Quiz = () => {
                 <button className="cancel-button" onClick={() => navigate("/")}>
                     Cancel
                 </button>
+
             </div>
         </div>
     );
