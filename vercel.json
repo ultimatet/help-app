@@ -9,25 +9,18 @@
       }
     },
     {
-      "src": "backend/server.js",
+      "src": "backend/index.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/(user|admin|question|profile|test|api)(.*)",
-      "dest": "/backend/server.js"
-    },
-    {
-      "src": "/",
-      "dest": "/backend/server.js"
-    },
-    {
-      "handle": "filesystem"
+      "src": "/backend/(.*)",
+      "dest": "/backend/index.js"
     },
     {
       "src": "/(.*)",
-      "dest": "/frontend/build/index.html"
+      "dest": "/frontend/$1"
     }
   ]
 }
