@@ -41,54 +41,54 @@ const Profile = () => {
     }, [user]);
 
 
-    // useEffect(() => {
-    //     const fetchRole = async () => {
-    //         if (isAuthenticated && user?.email) {
-    //             try {
-    //                 const encodedEmail = encodeURIComponent(user.email);
-    //                 const response = await fetch(`http://localhost:5000/user/role/${encodedEmail}`);
-    //                 const data = await response.json();
+    useEffect(() => {
+        const fetchRole = async () => {
+            if (isAuthenticated && user?.email) {
+                try {
+                    const encodedEmail = encodeURIComponent(user.email);
+                    const response = await fetch(`http://localhost:5000/user/role/${encodedEmail}`);
+                    const data = await response.json();
 
-    //                 if (response.ok) {
-    //                     setUserRole(data.role);
-    //                 } else {
-    //                     console.error("Error fetching role:", data.error);
-    //                 }
-    //             } catch (error) {
-    //                 console.error("API error:", error);
-    //             }
-    //         }
-    //     };
-    //     fetchRole();
-    // }, [isAuthenticated, user]);
+                    if (response.ok) {
+                        setUserRole(data.role);
+                    } else {
+                        console.error("Error fetching role:", data.error);
+                    }
+                } catch (error) {
+                    console.error("API error:", error);
+                }
+            }
+        };
+        fetchRole();
+    }, [isAuthenticated, user]);
 
-    // Fetch up to 3 most recent reports for the user
-    // useEffect(() => {
-    //     const fetchReports = async () => {
-    //         if (isAuthenticated && user?.email) {
-    //             try {
-    //                 const encodedEmail = encodeURIComponent(user.email);
-    //                 // Get user ID
-    //                 const userResponse = await fetch(
-    //                     `http://localhost:5000/user/id/${encodedEmail}`
-    //                 );
-    //                 const userData = await userResponse.json();
-    //                 if (!userData.id) return;
-    //                 // Get up to 3 most recent quiz results
-    //                 const resultsResponse = await fetch(
-    //                     `http://localhost:5000/question/results/${userData.id}`
-    //                 );
-    //                 const resultsData = await resultsResponse.json();
-    //                 if (resultsData.results && resultsData.results.length > 0) {
-    //                     setReports(resultsData.results.slice(0, 3));
-    //                 }
-    //             } catch (err) {
-    //                 console.error("Error fetching reports:", err);
-    //             }
-    //         }
-    //     };
-    //     fetchReports();
-    // }, [isAuthenticated, user]);
+    //Fetch up to 3 most recent reports for the user
+    useEffect(() => {
+        const fetchReports = async () => {
+            if (isAuthenticated && user?.email) {
+                try {
+                    const encodedEmail = encodeURIComponent(user.email);
+                    // Get user ID
+                    const userResponse = await fetch(
+                        `http://localhost:5000/user/id/${encodedEmail}`
+                    );
+                    const userData = await userResponse.json();
+                    if (!userData.id) return;
+                    // Get up to 3 most recent quiz results
+                    const resultsResponse = await fetch(
+                        `http://localhost:5000/question/results/${userData.id}`
+                    );
+                    const resultsData = await resultsResponse.json();
+                    if (resultsData.results && resultsData.results.length > 0) {
+                        setReports(resultsData.results.slice(0, 3));
+                    }
+                } catch (err) {
+                    console.error("Error fetching reports:", err);
+                }
+            }
+        };
+        fetchReports();
+    }, [isAuthenticated, user]);
 
     // Color palettes for each domain (to match Report.js)
     const domainColors = [
