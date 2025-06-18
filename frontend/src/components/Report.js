@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Radar } from "react-chartjs-2";
-import supabase from "../lib/supabaseClient";
-import { getBenchmarkInfo } from "../lib/benchmarkLookup";
+import supabase from "../lib/supabase";
+import { getBenchmarkInfo } from "../lib/benchmarks"; // Function to get benchmark info based on domain and score
 
 import "./Report.css";
 

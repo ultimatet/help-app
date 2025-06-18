@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import supabase from "../lib/supabaseClient";
+import supabase from "../lib/supabase";
 import Report from "./Report";
 import "./Quiz.css";
 

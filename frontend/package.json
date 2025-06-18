@@ -5,6 +5,7 @@
   "proxy": "http://localhost:5000",
   "dependencies": {
     "@auth0/auth0-react": "^2.3.0",
+    "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/supabase-js": "^2.49.8",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",

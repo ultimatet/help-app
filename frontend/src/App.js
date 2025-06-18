@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Quiz from "./components/Quiz";
@@ -10,8 +10,10 @@ import Resource from "./components/Resource";
 import Org from "./components/Org";
 import Dashboard from "./components/Dashboard";
 
+import supabase from "./lib/supabase";
+import { Auth } from "@supabase/auth-ui-react";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
 import ReactLoading from "react-loading";
 import "./App.css";
 
@@ -25,36 +27,22 @@ function ScrollToTop() {
 }
 
 function App() {
-    const { isAuthenticated, isLoading } = useAuth0();
-    const location = useLocation();
-
+    const [session, setSession] = useState(null);
     useEffect(() => {
-        if (!isLoading && !isAuthenticated && location.pathname === "/quiz") {
-            alert("You need to sign in to access the quiz.");
-        }
-    }, [isAuthenticated, isLoading, location.pathname]);
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            setSession(session);
+        });
+        const {
+            data: { subscription },
+        } = supabase.auth.onAuthStateChange((_event, session) => {
+            setSession(session);
+        });
+        return () => subscription.unsubscribe();
+    }, []);
 
-    if (isLoading) {
-        return (
-            <div className="App">
-                <Header />
-                <div className="container">
-                    <div className="loading-container">
-                        <ReactLoading
-                            className="loading"
-                            type={"spin"}
-                            color={"#000000"}
-                            height={100}
-                            width={100}
-                        />
-                    </div>
-                </div>
-                <Footer />
-            </div>
-        );
-    }
-
-    return (
+    return !session ? (
+        <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} />
+    ) : (
         <div className="App">
             <Header />
             <ScrollToTop />
@@ -63,8 +51,7 @@ function App() {
                     <Route path="/" element={<Navigate to="/home" replace />} />
                     <Route path="/home" element={<Home />} />
                     <Route
-                        path="/quiz"
-                        element={isAuthenticated ? <Quiz /> : <Navigate to="/home" replace />}
+                        path="/quiz" /* element={isAuthenticated ? <Quiz /> : <Navigate to="/home" replace />} */
                     />
                     <Route path="/about" element={<About />} />
                     <Route path="/resource" element={<Resource />} />

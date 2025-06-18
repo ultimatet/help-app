@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import FileSaver from "file-saver";
-import supabase from "../lib/supabaseClient";
+import supabase from "../lib/supabase";
 import "./Dashboard.css";
 
 const Dashboard = () => {
@@ -34,28 +34,6 @@ const Dashboard = () => {
         fetchUserRole();
     }, [user.email]);
 
-    // // Fetch user role from backend after authentication
-    // useEffect(() => {
-    //     const fetchRole = async () => {
-    //         if (isAuthenticated && user?.email) {
-    //             try {
-    //                 const encodedEmail = encodeURIComponent(user.email); // handle @
-    //                 const response = await fetch(`http://localhost:5000/user/role/${encodedEmail}`);
-    //                 const data = await response.json();
-
-    //                 if (response.ok) {
-    //                     setUserRole(data.role);
-    //                 } else {
-    //                     console.error("Error fetching role:", data.error);
-    //                 }
-    //             } catch (error) {
-    //                 console.error("API error:", error);
-    //             }
-    //         }
-    //     };
-
-    //     fetchRole();
-    // }, [isAuthenticated, user]);
 
     // Role verification
     useEffect(() => {

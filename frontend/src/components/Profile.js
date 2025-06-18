@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Radar } from "react-chartjs-2";
-import supabase from "../lib/supabaseClient"; 
+import supabase from "../lib/supabase"; 
 import {
     Chart as ChartJS,
     RadialLinearScale,
