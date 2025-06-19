@@ -10,9 +10,6 @@ import Resource from "./components/Resource";
 import Org from "./components/Org";
 import Dashboard from "./components/Dashboard";
 
-import supabase from "./lib/supabase";
-import { Auth } from "@supabase/auth-ui-react";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import ReactLoading from "react-loading";
 import "./App.css";
@@ -27,22 +24,9 @@ function ScrollToTop() {
 }
 
 function App() {
-    const [session, setSession] = useState(null);
-    useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session);
-        });
-        const {
-            data: { subscription },
-        } = supabase.auth.onAuthStateChange((_event, session) => {
-            setSession(session);
-        });
-        return () => subscription.unsubscribe();
-    }, []);
 
-    return !session ? (
-        <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} />
-    ) : (
+    // Remove Supabase Auth UI from here, login is now handled in Header
+    return (
         <div className="App">
             <Header />
             <ScrollToTop />
@@ -50,9 +34,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Navigate to="/home" replace />} />
                     <Route path="/home" element={<Home />} />
-                    <Route
-                        path="/quiz" /* element={isAuthenticated ? <Quiz /> : <Navigate to="/home" replace />} */
-                    />
+                    <Route path="/quiz" element={<Quiz />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/resource" element={<Resource />} />
                     <Route path="/org" element={<Org />} />

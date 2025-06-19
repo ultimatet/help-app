@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
+import supabase from "../lib/supabase";
 import "./Header.css";
 
 const Header = () => {
     const [popup, setPopup] = useState(false);
-    const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
+    const [user, setUser] = useState(null);
     const [userRole, setUserRole] = useState(null);
     const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
@@ -23,50 +23,40 @@ const Header = () => {
     }, [scrolled]);
 
     useEffect(() => {
-            const fetchRole = async () => {
-                if (isAuthenticated && user?.email) {
-                    try {
-                        const encodedEmail = encodeURIComponent(user.email); // handle @
-                        const response = await fetch(
-                            `http://localhost:5000/user/role/${encodedEmail}`
-                        );
-                        const data = await response.json();
-    
-                        if (response.ok) {
-                            setUserRole(data.role);
-                        } else {
-                            console.error("Error fetching role:", data.error);
-                        }
-                    } catch (error) {
-                        console.error("API error:", error);
+        // Get Supabase Auth user
+        const getUser = async () => {
+            const {
+                data: { user },
+            } = await supabase.auth.getUser();
+            setUser(user);
+            if (user && user.email) {
+                try {
+                    const encodedEmail = encodeURIComponent(user.email); // handle @
+                    const response = await fetch(`http://localhost:5000/user/role/${encodedEmail}`);
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        setUserRole(data.role);
+                    } else {
+                        console.error("Error fetching role:", data.error);
                     }
+                } catch (error) {
+                    console.error("API error:", error);
                 }
-            };
-    
-            fetchRole();
-        }, [isAuthenticated, user]);
+            }
+        };
 
-    const handleLogin = () => {
-        loginWithRedirect({
-            authorizationParams: {
-                redirect_uri: window.location.origin,
-            },
-        });
+        getUser();
+    }, []);
+
+    const handleLogin = async () => {
+        await supabase.auth.signInWithOAuth({ provider: "google" });
     };
-
-    const handleRegister = () => {
-        loginWithRedirect({
-            authorizationParams: {
-                screen_hint: "signup",
-                redirect_uri: window.location.origin,
-            },
-        });
-    };
-
-    const handleLogout = () => {
-        logout({
-            returnTo: window.location.origin,
-        });
+    const handleRegister = handleLogin; // Supabase Auth handles signup via OAuth
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
+        setUser(null);
+        setUserRole(null);
     };
 
     return (
@@ -105,7 +95,7 @@ const Header = () => {
             {popup && (
                 <div className="popup-overlay" onClick={() => setPopup(!popup)}>
                     <div className="popup-content">
-                        {isAuthenticated ? (
+                        {!!user ? (
                             <>
                                 <button>
                                     <Link to="/profile">My Profile</Link>
