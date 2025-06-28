@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
+import supabase from "../lib/supabase";
+import { getBenchmarkInfo } from "../lib/benchmarks";
 import { Radar } from "react-chartjs-2";
-import supabase from "../lib/supabase"; 
 import {
     Chart as ChartJS,
     RadialLinearScale,
@@ -13,122 +13,93 @@ import {
 } from "chart.js";
 import "./Profile.css";
 
-// Register Chart.js components
+// register chart components
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 
-const Profile = () => {
-    const { user, isAuthenticated } = useAuth0();
-    const [userRole, setUserRole] = useState(null);
-    const [reports, setReports] = useState([]); // Store up to 3 most recent reports
-    const [selectedReportIdx, setSelectedReportIdx] = useState(0); // Index of report to display
+const Profile = ({ user }) => {
+    const [role, setRole] = useState(null);
+    const [reports, setReports] = useState([]);
+    const [selIdx, setSelIdx] = useState(0);
 
+    // 1️⃣ fetch role from your "users" table
     useEffect(() => {
-        async function fetchUserRole() {
-            // Fetch the user's role from the users table
+        if (!user?.id) return;
+        const loadRole = async () => {
             const { data, error } = await supabase
                 .from("users")
                 .select("role")
-                .eq("auth0_email", user.email)
+                .eq("auth_id", user.id)
                 .single();
             if (error) {
-                console.error("Failed to fetch user role from Supabase:", error);
-            } else {
-                setUserRole(data.role);
-                console.log("User role:", data.role);
+                console.error("fetch role:", error);
+            } else if (data) {
+                setRole(data.role);
             }
-        }
-        fetchUserRole();
+        };
+        loadRole();
     }, [user]);
 
-
+    // 2️⃣ fetch up to 3 latest reports
     useEffect(() => {
-        const fetchRole = async () => {
-            if (isAuthenticated && user?.email) {
-                try {
-                    const encodedEmail = encodeURIComponent(user.email);
-                    const response = await fetch(`http://localhost:5000/user/role/${encodedEmail}`);
-                    const data = await response.json();
+        const loadReports = async () => {
+            if (!user?.id) return;
+            // 1. Look up your app's user table id using the Supabase Auth UUID
+            const { data: userRow, error: userError } = await supabase
+                .from("users")
+                .select("id")
+                .eq("auth_id", user.id)
+                .single();
 
-                    if (response.ok) {
-                        setUserRole(data.role);
-                    } else {
-                        console.error("Error fetching role:", data.error);
-                    }
-                } catch (error) {
-                    console.error("API error:", error);
-                }
+            if (userError || !userRow) {
+                console.error("fetch user row:", userError);
+                return;
             }
-        };
-        fetchRole();
-    }, [isAuthenticated, user]);
 
-    //Fetch up to 3 most recent reports for the user
-    useEffect(() => {
-        const fetchReports = async () => {
-            if (isAuthenticated && user?.email) {
-                try {
-                    const encodedEmail = encodeURIComponent(user.email);
-                    // Get user ID
-                    const userResponse = await fetch(
-                        `http://localhost:5000/user/id/${encodedEmail}`
-                    );
-                    const userData = await userResponse.json();
-                    if (!userData.id) return;
-                    // Get up to 3 most recent quiz results
-                    const resultsResponse = await fetch(
-                        `http://localhost:5000/question/results/${userData.id}`
-                    );
-                    const resultsData = await resultsResponse.json();
-                    if (resultsData.results && resultsData.results.length > 0) {
-                        setReports(resultsData.results.slice(0, 3));
-                    }
-                } catch (err) {
-                    console.error("Error fetching reports:", err);
-                }
-            }
-        };
-        fetchReports();
-    }, [isAuthenticated, user]);
+            // 2. Now use userRow.id to fetch quiz results
+            const { data, error } = await supabase
+                .from("quiz_results")
+                .select("id, answers, categoryScores, createdAt")
+                .eq("userId", userRow.id)
+                .order("createdAt", { ascending: false })
+                .limit(3);
 
-    // Color palettes for each domain (to match Report.js)
+            if (error) console.error("fetch reports:", error);
+            else setReports(data);
+        };
+        if (user?.id) loadReports();
+    }, [user.id]);
+
+    // chart colours
     const domainColors = [
-        "rgba(255, 99, 132, 0.5)", // red
-        "rgba(54, 162, 235, 0.5)", // blue
-        "rgba(255, 205, 86, 0.5)", // yellow
-        "rgba(75, 192, 192, 0.5)", // teal
-        "rgba(153, 102, 255, 0.5)", // purple
-        "rgba(255, 159, 64, 0.5)", // orange
-        "rgba(83, 102, 255, 0.5)", // indigo
-        "rgba(199, 199, 199, 0.5)", // grey
+        "rgba(255, 99, 132, 0.5)",
+        "rgba(54, 162, 235, 0.5)",
+        "rgba(255, 205, 86, 0.5)",
+        "rgba(75, 192, 192, 0.5)",
+        "rgba(153, 102, 255, 0.5)",
+        "rgba(255, 159, 64, 0.5)",
+        "rgba(83, 102, 255, 0.5)",
+        "rgba(199, 199, 199, 0.5)",
     ];
-    const borderColors = [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 205, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-        "rgba(153, 102, 255, 1)",
-        "rgba(255, 159, 64, 1)",
-        "rgba(83, 102, 255, 1)",
-        "rgba(199, 199, 199, 1)",
-    ];
+    const borderColors = domainColors.map((c) => c.replace("0.5", "1"));
 
-    // Prepare radar chart data for the selected report, with per-domain colors
-    const selectedReport = reports[selectedReportIdx];
-    const radarData = selectedReport
+    // prepare selected report data
+    const report = reports[selIdx];
+    const hasScores = report && report.categoryScores && typeof report.categoryScores === "object";
+    const radarData = hasScores
         ? {
-              labels: Object.keys(selectedReport.scores),
+              labels: Object.keys(report.categoryScores),
               datasets: [
                   {
                       label: "Death Literacy Score",
-                      data: Object.values(selectedReport.scores),
-                      backgroundColor: Object.keys(selectedReport.scores).map(
+                      data: Object.values(report.categoryScores),
+                      backgroundColor: Object.keys(report.categoryScores).map(
                           (_, i) => domainColors[i % domainColors.length]
                       ),
-                      borderColor: Object.keys(selectedReport.scores).map(
+                      borderColor: Object.keys(report.categoryScores).map(
                           (_, i) => borderColors[i % borderColors.length]
                       ),
                       borderWidth: 3,
-                      pointBackgroundColor: Object.keys(selectedReport.scores).map(
+                      pointBackgroundColor: Object.keys(report.categoryScores).map(
                           (_, i) => borderColors[i % borderColors.length]
                       ),
                       pointBorderColor: "#fff",
@@ -137,83 +108,100 @@ const Profile = () => {
           }
         : null;
 
-    // Radar chart options, including custom legend to show all domains, and smaller size
     const radarOptions = {
         responsive: true,
-        plugins: {
-            legend: {
-                display: false, // Hide the legend
-            },
-        },
+        plugins: { legend: { display: false } },
         scales: {
             r: {
                 suggestedMin: 0,
-                suggestedMax: 10,
-                ticks: {
-                    beginAtZero: true,
-                    stepSize: 2,
-                    font: { size: 12 },
-                },
-                pointLabels: {
-                    font: { size: 13 },
-                },
+                suggestedMax: 5,
+                ticks: { beginAtZero: true, stepSize: 1, font: { size: 12 } },
+                pointLabels: { font: { size: 13 } },
             },
         },
     };
 
     return (
-        isAuthenticated && (
-            <div className="profile-container">
-                <div className="container-bg">
-                    <div className="profile">
-                        <h2>{user.name}</h2>
-                        <p>{user.email}</p>
-                        <p>Role: {userRole}</p>
-                    </div>
-                    <div className="report-container">
-                        <div className="report-card">
-                            <h2>Reports</h2>
-                            {/* Report selector */}
-                            {reports.length > 1 && (
-                                <div style={{ marginBottom: "1rem" }}>
-                                    <label htmlFor="report-select">
-                                        <b>Select Report:</b>{" "}
-                                    </label>
-                                    <select
-                                        id="report-select"
-                                        value={selectedReportIdx}
-                                        onChange={(e) =>
-                                            setSelectedReportIdx(Number(e.target.value))
-                                        }
-                                    >
-                                        {reports.map((r, idx) => (
-                                            <option key={r.id} value={idx}>
-                                                {`Report on (${new Date(
-                                                    r.createdAt
-                                                ).toLocaleString()})`}
-                                            </option>
-                                        ))}
-                                    </select>
+        <div className="profile-container">
+            <div className="container-bg">
+                <div className="profile">
+                    <h2>{user.user_metadata?.full_name || user.email}</h2>
+                    <p>{user.email}</p>
+                    <p>Role: {role ?? "--"}</p>
+                </div>
+
+                <div className="report-container">
+                    <div className="report-card">
+                        <h2>Reports</h2>
+                        {reports.length > 1 && (
+                            <div style={{ marginBottom: "1rem" }}>
+                                <label htmlFor="report-select">
+                                    <b>Select Report:</b>
+                                </label>{" "}
+                                <select
+                                    id="report-select"
+                                    value={selIdx}
+                                    onChange={(e) => setSelIdx(Number(e.target.value))}
+                                >
+                                    {reports.map((r, i) => (
+                                        <option key={r.id} value={i}>
+                                            {new Date(r.createdAt).toLocaleString()}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
+
+                        {hasScores ? (
+                            <>
+                                <p>Date: {new Date(report.createdAt).toLocaleString()}</p>
+                                <div className="radar-chart">
+                                    <Radar data={radarData} options={radarOptions} />
                                 </div>
-                            )}
-                            {selectedReport ? (
-                                <>
-                                    <p>
-                                        Date: {new Date(selectedReport.createdAt).toLocaleString()}
-                                    </p>
-                                    {/* Radar Chart Section */}
-                                    <div className="radar-chart">
-                                        <Radar data={radarData} options={radarOptions} />
-                                    </div>
-                                </>
-                            ) : (
-                                <p>No reports found.</p>
-                            )}
-                        </div>
+                                <div className="detailed-report">
+                                    <h3>Detailed Analysis</h3>
+                                    {Object.entries(report.categoryScores).map(
+                                        ([domain, score]) => {
+                                            const bench = getBenchmarkInfo(domain, score);
+                                            return (
+                                                <details key={domain} className="report-domain">
+                                                    <summary className="domain-summary">
+                                                        <h4>{domain}</h4>
+                                                        <span className="score-badge">
+                                                            {typeof score === "number" &&
+                                                            !isNaN(score)
+                                                                ? score.toFixed(1)
+                                                                : "-"}
+                                                            /5
+                                                        </span>
+                                                    </summary>
+                                                    <div className="domain-content">
+                                                        <p>
+                                                            <strong>How you scored:</strong>{" "}
+                                                            {bench?.label || "-"}
+                                                        </p>
+                                                        <p>
+                                                            <strong>What this means:</strong>{" "}
+                                                            {bench?.meaning || "-"}
+                                                        </p>
+                                                        <p>
+                                                            <strong>What you can do:</strong>{" "}
+                                                            {bench?.action || "-"}
+                                                        </p>
+                                                    </div>
+                                                </details>
+                                            );
+                                        }
+                                    )}
+                                </div>
+                            </>
+                        ) : (
+                            <p>No report data found.</p>
+                        )}
                     </div>
                 </div>
             </div>
-        )
+        </div>
     );
 };
 

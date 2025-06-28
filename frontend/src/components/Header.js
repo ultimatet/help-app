@@ -1,62 +1,47 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import supabase from "../lib/supabase";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import supabase  from "../lib/supabase";
 import "./Header.css";
 
-const Header = () => {
+const Header = ({ user}) => {
     const [popup, setPopup] = useState(false);
-    const [user, setUser] = useState(null);
     const [userRole, setUserRole] = useState(null);
     const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
 
+    // 1️⃣ scroll‐style hook (always runs)
     useEffect(() => {
-        const handleScroll = () => {
-            const isScrolled = window.scrollY > 10;
-            if (isScrolled !== scrolled) {
-                setScrolled(isScrolled);
-            }
-        };
-
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, [scrolled]);
-
-    useEffect(() => {
-        // Get Supabase Auth user
-        const getUser = async () => {
-            const {
-                data: { user },
-            } = await supabase.auth.getUser();
-            setUser(user);
-            if (user && user.email) {
-                try {
-                    const encodedEmail = encodeURIComponent(user.email); // handle @
-                    const response = await fetch(`http://localhost:5000/user/role/${encodedEmail}`);
-                    const data = await response.json();
-
-                    if (response.ok) {
-                        setUserRole(data.role);
-                    } else {
-                        console.error("Error fetching role:", data.error);
-                    }
-                } catch (error) {
-                    console.error("API error:", error);
-                }
-            }
-        };
-
-        getUser();
+        const onScroll = () => setScrolled(window.scrollY > 10);
+        window.addEventListener("scroll", onScroll);
+        return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
-    const handleLogin = async () => {
-        await supabase.auth.signInWithOAuth({ provider: "google" });
-    };
-    const handleRegister = handleLogin; // Supabase Auth handles signup via OAuth
+    // 2️⃣ fetch role whenever `user` changes
+    useEffect(() => {
+        const loadRole = async () => {
+            if (!user?.id) {
+                setUserRole(null);
+                return;
+            }
+            const { data, error } = await supabase
+                .from("users")
+                .select("role")
+                .eq("auth_id", user.id)
+                .single();
+            if (error) {
+                console.error("fetch role:", error);
+            } else if (data) {
+                setUserRole(data.role);
+            }
+        };
+        loadRole();
+    }, [user]);
+
+    // 3️⃣ sign‐out handler
     const handleLogout = async () => {
         await supabase.auth.signOut();
-        setUser(null);
-        setUserRole(null);
+        navigate("/home");
     };
 
     return (
@@ -86,31 +71,31 @@ const Header = () => {
                     <img alt="user" src="/pic/person.png" />
                 </button>
             </nav>
+
             <div className={`hero ${location.pathname === "/home" ? "" : "hero-other"}`}>
                 <img src="/pic/hero-plant.png" alt="Hero" className="hero-image" />
                 <div className="hero-text">
                     <h1>Be informed. Be prepared.</h1>
                 </div>
             </div>
+
             {popup && (
-                <div className="popup-overlay" onClick={() => setPopup(!popup)}>
-                    <div className="popup-content">
-                        {!!user ? (
+                <div className="popup-overlay" onClick={() => setPopup(false)}>
+                    <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+                        {user ? (
                             <>
-                                <button>
-                                    <Link to="/profile">My Profile</Link>
-                                </button>
+                                <button onClick={() => navigate("/profile")}>My Profile</button>
                                 {userRole === "admin" && (
-                                    <button>
-                                        <Link to="/dashboard">Dashboard</Link>
+                                    <button onClick={() => navigate("/dashboard")}>
+                                        Dashboard
                                     </button>
                                 )}
                                 <button onClick={handleLogout}>Log Out</button>
                             </>
                         ) : (
                             <>
-                                <button onClick={handleLogin}>Login</button>
-                                <button onClick={handleRegister}> Register </button>
+                                <button onClick={() => navigate("/login")}>Login</button>
+                                <button onClick={() => navigate("/register")}>Register</button>
                             </>
                         )}
                         <button className="close-btn" onClick={() => setPopup(false)}>

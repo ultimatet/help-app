@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import supabase from "../lib/supabase";
-import Report from "./Report";
 import "./Quiz.css";
 
-const Quiz = () => {
+const Quiz = ({ loading, setLoading }) => {
     const [questions, setQuestions] = useState([]);
     const [answers, setAnswers] = useState({});
     const [step, setStep] = useState(0);
-    const [report, setReport] = useState(null);
-    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     // 1) Fetch questions from Supabase on mount
@@ -17,7 +14,8 @@ const Quiz = () => {
         async function fetchQuestions() {
             const { data, error } = await supabase
                 .from("questions")
-                .select("id, question_text, category, text, domain");
+                .select("id, question_text, category");
+
             if (error) {
                 console.error("Failed to fetch quiz questions from Supabase:", error);
                 setQuestions([]);
@@ -26,8 +24,8 @@ const Quiz = () => {
                 const normalized = data.map((q) => ({
                     ...q,
                     id: typeof q.id === "number" ? String(q.id) : q.id,
-                    question_text: q.question_text || q.text || q.questionText || q.prompt || "",
-                    category: q.category || q.domain || "",
+                    question_text: q.question_text || q.text || "",
+                    category: q.category || "",
                 }));
                 setQuestions(normalized);
             }
@@ -45,6 +43,7 @@ const Quiz = () => {
         try {
             if (step < questions.length - 1) {
                 setStep((s) => s + 1);
+                setLoading(false);
             } else {
                 // Submit logic
                 try {
@@ -56,7 +55,16 @@ const Quiz = () => {
                     if (userError || !user) {
                         throw new Error("User not found in Supabase Auth: " + userError?.message);
                     }
-                    const userId = user.id;
+                    const { data: userRow, error: dbError } = await supabase
+                        .from("users")
+                        .select("id")
+                        .eq("auth_id", user.id)
+                        .single();
+
+                    if (dbError || !userRow) {
+                        throw new Error("User not found in users table: " + dbError?.message);
+                    }
+                    const userId = userRow.id;
 
                     // 2. Transform answers from { qid: value } to array of { questionId, selectedValue }
                     const transformedAnswers = Object.entries(answers).map(
@@ -99,7 +107,7 @@ const Quiz = () => {
                     }
 
                     console.log("Quiz result submitted:", resultData);
-                    setReport({ categoryScores }); // or use resultData[0] if you want full result
+                    navigate("/report", { state: { report: { categoryScores } } });
                 } catch (err) {
                     console.error("Quiz submission failed:", err);
                 } finally {
@@ -113,18 +121,8 @@ const Quiz = () => {
     };
 
     // 5) Render states
-    if (!questions.length) return <div>Loading questions…</div>;
-    if (report)
-        return (
-            <Report
-                report={report}
-                onRetake={() => {
-                    setReport(null);
-                    setAnswers({});
-                    setStep(0);
-                }}
-            />
-        );
+    if (!questions.length)
+        return loading || typeof loading === "undefined" ? <div>Loading…</div> : loading;
 
     const q = questions[step];
     const selected = answers[q.id] || 0;

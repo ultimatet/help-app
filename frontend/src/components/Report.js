@@ -1,92 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 import { Radar } from "react-chartjs-2";
-import supabase from "../lib/supabase";
-import { getBenchmarkInfo } from "../lib/benchmarks"; // Function to get benchmark info based on domain and score
-
+import { useLocation, useNavigate } from "react-router-dom";
+import { getBenchmarkInfo } from "../lib/benchmarks";
 import "./Report.css";
 
 // Report component displays the user's quiz results, including a radar chart and detailed analysis
-const Report = ({ report, onRetake }) => {
-    const { user } = useAuth0();
-    const [scores, setScores] = useState(null);
-
-    // useEffect(() => {
-    //     const fetchResults = async () => {
-    //         if (!user?.email) return;
-
-    //         try {
-    //             // Step 1: Get the user by email (assuming you store Auth0 email in Supabase users table)
-    //             const { data: userData, error: userError } = await supabase
-    //                 .from("users")
-    //                 .select("id")
-    //                 .eq("auth0_email", user.email)
-    //                 .single();
-
-    //             if (userError || !userData) {
-    //                 console.warn("No user found for email.");
-    //                 return;
-    //             }
-
-    //             const userId = userData.id;
-
-    //             // Step 2: Get quiz results for this user
-    //             const { data: results, error: resultsError } = await supabase
-    //                 .from("quiz_results")
-    //                 .select("id, answers, categoryScores, createdAt")
-    //                 .eq("userId", userId)
-    //                 .order("createdAt", { ascending: false });
-
-    //             if (resultsError || !results || results.length === 0) {
-    //                 console.warn("No quiz results found for user.");
-    //                 return;
-    //             }
-
-    //             // Use the most recent result
-    //             const latestResult = results[0];
-    //             setScores(latestResult.categoryScores);
-    //         } catch (err) {
-    //             console.error("Error fetching results from Supabase:", err);
-    //         }
-    //     };
-
-    //     fetchResults();
-    // }, [user]);
-
-    // Fetch the user's latest quiz scores from the backend
-    useEffect(() => {
-        const fetchResults = async () => {
-            try {
-                // Step 1: Get user ID by email
-                const encodedEmail = encodeURIComponent(user.email);
-                const userResponse = await fetch(`http://localhost:5000/user/id/${encodedEmail}`);
-                const userData = await userResponse.json();
-
-                if (!userData.id) {
-                    console.warn("No user ID found for email.");
-                    return;
-                }
-
-                // Step 2: Get quiz results using the user ID
-                const resultsResponse = await fetch(
-                    `http://localhost:5000/question/results/${userData.id}`
-                );
-                const resultsData = await resultsResponse.json();
-
-                if (resultsData.results && resultsData.results.length > 0) {
-                    // Get the most recent result (first in array since ordered by createdAt DESC)
-                    const latestResult = resultsData.results[0];
-                    setScores(latestResult.scores);
-                } else {
-                    console.warn("No quiz results found for user.");
-                }
-            } catch (error) {
-                console.error("Error fetching user results:", error);
-            }
-        };
-
-        if (user?.email) fetchResults();
-    }, [user]);
+const Report = ({ session, user }) => {
+    const location = useLocation();
+    const navigate = useNavigate();
+    // Get report data from location state (from Quiz submission)
+    const report = location.state?.report;
+    const scores = report?.categoryScores || null;
 
     // Define color palettes for each domain in the radar chart
     const domainColors = [
@@ -99,17 +23,7 @@ const Report = ({ report, onRetake }) => {
         "rgba(83, 102, 255, 0.5)", // indigo
         "rgba(199, 199, 199, 0.5)", // grey
     ];
-
-    const borderColors = [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 205, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-        "rgba(153, 102, 255, 1)",
-        "rgba(255, 159, 64, 1)",
-        "rgba(83, 102, 255, 1)",
-        "rgba(199, 199, 199, 1)",
-    ];
+    const borderColors = domainColors.map((c) => c.replace("0.5", "1"));
 
     // Prepare radar chart data, assigning a unique color to each domain
     const radarData = scores
@@ -142,11 +56,11 @@ const Report = ({ report, onRetake }) => {
         responsive: true,
         plugins: {
             legend: {
-                display: true,
+                display: false,
                 position: "bottom",
                 labels: {
-                    usePointStyle: true,
-                    padding: 30,
+                    usePointStyle: false,
+                    padding: 20,
                     font: {
                         size: 16,
                     },
@@ -168,13 +82,15 @@ const Report = ({ report, onRetake }) => {
         scales: {
             r: {
                 suggestedMin: 0,
-                suggestedMax: 10, // max score per domain is 10
+                suggestedMax: 5, 
                 ticks: {
-                    beginAtZero: true,
+                    beginAtZero: true, stepsize: 1, font: { size: 12 },
                 },
             },
         },
     };
+
+    if (!scores) return <div>No report data found.</div>;
 
     return (
         <div className="report">
@@ -204,7 +120,7 @@ const Report = ({ report, onRetake }) => {
                                             {typeof score === "number" && !isNaN(score)
                                                 ? score.toFixed(1)
                                                 : "-"}
-                                            /10
+                                            /5
                                         </span>
                                     </summary>
                                     <div className="domain-content">
@@ -227,7 +143,7 @@ const Report = ({ report, onRetake }) => {
 
             {/* Retake Quiz button */}
             <div className="report-actions">
-                <button onClick={onRetake}>Retake Quiz</button>
+                <button onClick={() => navigate("/quiz")}>Retake Quiz</button>
             </div>
         </div>
     );
