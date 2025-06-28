@@ -9,12 +9,12 @@
   ],
   "routes": [
     { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/frontend/build/index.html" }
+    { "src": "/(.*)", "dest": "/index.html" }
   ],
+  "devCommand": "npm run start --prefix frontend",
   "build": {
     "env": {
       "CI": "false"
     }
-  },
-  "devCommand": "npm run start --prefix frontend"
+  }
 }
