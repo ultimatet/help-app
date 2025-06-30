@@ -7,9 +7,12 @@
       "config": { "distDir": "build" }
     }
   ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ],
   "routes": [
     { "handle": "filesystem" },
-    { "src": "/(.*)",       "dest": "/index.html" }
+    { "src": "/(.*)", "dest": "/index.html" }
   ],
   "env": {
     "CI": "false"
