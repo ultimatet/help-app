@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Radar } from "react-chartjs-2";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getBenchmarkInfo } from "../lib/benchmarks";
