@@ -3,11 +3,19 @@ import { useNavigate } from "react-router-dom";
 import supabase from "../lib/supabase";
 import "./Quiz.css";
 
-const Quiz = ({ loading, setLoading }) => {
+const Quiz = ({ loading, setLoading, user }) => {
     const [questions, setQuestions] = useState([]);
     const [answers, setAnswers] = useState({});
     const [step, setStep] = useState(0);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Ensure user is logged in before allowing access to quiz
+        if (!user && !loading) {
+            alert("User not authenticated. Redirecting to login.");
+            navigate("/login");
+        };
+        }, [user, navigate, loading]);
 
     // 1) Fetch questions from Supabase on mount
     useEffect(() => {

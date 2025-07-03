@@ -68,7 +68,7 @@ function App() {
 
     return (
         <div className="App">
-            <Header user={user}/>
+            <Header user={user} />
             <ScrollToTop />
             <div className="container">
                 <Routes>
@@ -76,14 +76,27 @@ function App() {
                     <Route path="/home" element={<Home />} />
                     <Route path="/login" element={<AuthPage initialView="sign_in" />} />
                     <Route path="/register" element={<AuthPage initialView="sign_up" />} />
-                    <Route path="/quiz" element={<Quiz loading={isLoading} setLoading={setIsLoading}/>} />
-                    <Route path="/report" element={<Report session={session} user={user}/>} />
+                    <Route
+                        path="/quiz"
+                        element={<Quiz loading={isLoading} setLoading={setIsLoading} user={user} />}
+                    />
+                    <Route path="/report" element={<Report session={session} user={user} />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/resource" element={<Resource />} />
                     <Route path="/org" element={<Org />} />
                     <Route path="/contact" element={<Contact />} />
-                    <Route path="/profile" element={<Profile session={session} user={user}/>} />
-                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route
+                        path="/profile"
+                        element={
+                            user ? (
+                                <Profile session={session} user={user} />
+                            ) : (
+                                <div>Loading user...</div>
+                            )
+                        }
+                    />
+
+                    <Route path="/dashboard" element={<Dashboard user={user} />} />
                     <Route path="*" element={<Navigate to="/home" replace />} />
                 </Routes>
             </div>

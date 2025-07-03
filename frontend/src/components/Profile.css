@@ -1,3 +1,4 @@
+/* Layout Containers */
 .profile-container {
     min-height: 80vh;
 }
@@ -21,6 +22,7 @@
     border-radius: 1rem;
 }
 
+/* Report Section Layout */
 .report-container {
     display: flex;
     flex-direction: row;
@@ -29,7 +31,6 @@
     margin: 2rem auto;
     padding: 2rem;
 }
-
 
 .radar-chart {
     position: relative;
@@ -45,8 +46,7 @@
     justify-content: center;
 }
 
-/* Profile.css - styles for Profile.js collapsible benchmark details */
-
+/* Detailed Report Section */
 .detailed-report {
     height: 100%;
     max-height: 700px;
@@ -64,6 +64,7 @@
     font-size: 1.2rem;
 }
 
+/* Collapsible Domain Details */
 .report-domain {
     margin: 0 auto 15px;
     border: 1px solid #ddd;
@@ -141,7 +142,7 @@ details summary::marker {
     display: none;
 }
 
-/* Report selector margin */
+/* Report Selector Styles */
 #report-select {
     margin-left: 0.5em;
     padding: 0.3em 0.7em;
@@ -150,11 +151,11 @@ details summary::marker {
     font-size: 1rem;
 }
 
-/* Container for the report selector */
 .profile-report-selector {
     margin-bottom: 1rem;
 }
 
+/* Report View Layout */
 .profile-report-view {
     display: flex;
     flex-direction: row;
@@ -205,6 +206,7 @@ details summary::marker {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
+/* Report Card Styles */
 .report-card {
     max-width: 1200px;
     min-width: 700px;
@@ -230,6 +232,7 @@ details summary::marker {
     text-align: center;
 }
 
+/* Chart Container Styles */
 .chart-container {
     width: 100%;
     max-width: 500px;
@@ -277,7 +280,66 @@ details summary::marker {
     text-align: center;
 }
 
+/* Profile Button Styles */
+.profile button {
+    text-decoration: none;
+    color: white;
+    background-color: #b38a6d;
+    padding: 8px 16px;
+    border-radius: 5px;
+    display: inline-block;
+    width: 8%;
+    align-self: center;
+}
+
+.profile button:hover {
+    background-color: #6b8c7d;
+    cursor: pointer;
+    box-shadow: 0 4px 10px #88a09680;
+}
+
+/* Edit Name Icon Styles */
+.edit-name-icon {
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: color 0.2s;
+    user-select: none;
+    vertical-align: middle;
+}
+
+.edit-name-icon:hover {
+    text-shadow: 0 2px 6px rgba(59, 130, 246, 0.12);
+}
+
+.edit-name-inner-icon {
+    display: inline-block;
+    font-size: 16px;
+    color: #000000;
+    border-radius: 6px;
+    padding: 10px 20px;
+    vertical-align: middle;
+}
+
+/* Profile Name Row (Name + Icon) */
+.profile-name-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+    gap: 0.5rem;
+}
+
+.profile-name-row>span.edit-name-icon {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 @media (max-width: 900px) {
+
+    /* Responsive Styles */
     .profile-report-view {
         flex-direction: row;
         gap: 1.5rem;

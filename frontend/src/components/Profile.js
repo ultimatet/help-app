@@ -13,49 +13,45 @@ import {
 } from "chart.js";
 import "./Profile.css";
 
-// register chart components
+// Register Chart.js components
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 
 const Profile = ({ user }) => {
     const [role, setRole] = useState(null);
     const [reports, setReports] = useState([]);
     const [selIdx, setSelIdx] = useState(0);
+    const [editing, setEditing] = useState(false);
+    const [nameInput, setNameInput] = useState("");
 
-    // 1️⃣ fetch role from your "users" table
     useEffect(() => {
         if (!user?.id) return;
-        const loadRole = async () => {
+
+        const fetchRole = async () => {
             const { data, error } = await supabase
                 .from("users")
                 .select("role")
                 .eq("auth_id", user.id)
                 .single();
-            if (error) {
-                console.error("fetch role:", error);
-            } else if (data) {
-                setRole(data.role);
-            }
-        };
-        loadRole();
-    }, [user]);
 
-    // 2️⃣ fetch up to 3 latest reports
+            if (error) console.error("fetch role:", error);
+            else setRole(data.role);
+        };
+
+        fetchRole();
+    }, [user?.id]);
+
     useEffect(() => {
-        const loadReports = async () => {
-            if (!user?.id) return;
-            // 1. Look up your app's user table id using the Supabase Auth UUID
+        if (!user?.id) return;
+
+        const fetchReports = async () => {
             const { data: userRow, error: userError } = await supabase
                 .from("users")
                 .select("id")
                 .eq("auth_id", user.id)
                 .single();
 
-            if (userError || !userRow) {
-                console.error("fetch user row:", userError);
-                return;
-            }
+            if (userError || !userRow) return console.error("fetch user row:", userError);
 
-            // 2. Now use userRow.id to fetch quiz results
             const { data, error } = await supabase
                 .from("quiz_results")
                 .select("id, answers, categoryScores, createdAt")
@@ -66,10 +62,32 @@ const Profile = ({ user }) => {
             if (error) console.error("fetch reports:", error);
             else setReports(data);
         };
-        if (user?.id) loadReports();
-    }, [user.id]);
 
-    // chart colours
+        fetchReports();
+    }, [user?.id]);
+
+    useEffect(() => {
+        if (user?.user_metadata?.full_name) {
+            setNameInput(user.user_metadata.full_name);
+        } else if (user?.email) {
+            setNameInput("");
+        }
+    }, [user]);
+
+    const handleEdit = () => setEditing((prev) => !prev);
+    const handleNameChange = (e) => setNameInput(e.target.value);
+
+    const handleNameSave = async () => {
+        if (!user?.id) return;
+
+        const { error } = await supabase.auth.updateUser({
+            data: { full_name: nameInput },
+        });
+
+        if (error) alert("Failed to update name: " + error.message);
+        else setEditing(false);
+    };
+
     const domainColors = [
         "rgba(255, 99, 132, 0.5)",
         "rgba(54, 162, 235, 0.5)",
@@ -82,9 +100,9 @@ const Profile = ({ user }) => {
     ];
     const borderColors = domainColors.map((c) => c.replace("0.5", "1"));
 
-    // prepare selected report data
     const report = reports[selIdx];
-    const hasScores = report && report.categoryScores && typeof report.categoryScores === "object";
+    const hasScores = report?.categoryScores && typeof report.categoryScores === "object";
+
     const radarData = hasScores
         ? {
               labels: Object.keys(report.categoryScores),
@@ -121,18 +139,50 @@ const Profile = ({ user }) => {
         },
     };
 
+    if (!user?.id) return <div>Loading user...</div>;
+
     return (
         <div className="profile-container">
             <div className="container-bg">
                 <div className="profile">
-                    <h2>{user.user_metadata?.full_name || user.email}</h2>
-                    <p>{user.email}</p>
-                    <p>Role: {role ?? "--"}</p>
+                    {editing ? (
+                        <>
+                            <input
+                                type="text"
+                                value={nameInput}
+                                onChange={handleNameChange}
+                                placeholder="Enter your name"
+                            />
+                            <button onClick={handleNameSave}>Save</button>
+                            <button onClick={() => setEditing(false)}>Cancel</button>
+                        </>
+                    ) : (
+                        <>
+                            <h2 className="profile-name-row">
+                                {user.user_metadata?.full_name || user.email}
+                                <span
+                                    className="edit-name-icon"
+                                    title="Edit Name"
+                                    onClick={handleEdit}
+                                    role="button"
+                                    tabIndex={0}
+                                    onKeyPress={(e) => {
+                                        if (e.key === "Enter") handleEdit();
+                                    }}
+                                >
+                                    <span className="edit-name-inner-icon">🖋</span>
+                                </span>
+                            </h2>
+                            <p>{user.email}</p>
+                            <p>Role: {role ?? "--"}</p>
+                        </>
+                    )}
                 </div>
 
                 <div className="report-container">
                     <div className="report-card">
                         <h2>Reports</h2>
+
                         {reports.length > 1 && (
                             <div style={{ marginBottom: "1rem" }}>
                                 <label htmlFor="report-select">

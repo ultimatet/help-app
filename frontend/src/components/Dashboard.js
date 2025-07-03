@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import axios from "axios";
 import FileSaver from "file-saver";
 import supabase from "../lib/supabase";
 import "./Dashboard.css";
 
-const Dashboard = () => {
-    const { user, isAuthenticated } = useAuth0();
-
+const Dashboard = ({ user }) => {
     const [userRole, setUserRole] = useState(null); // role fetched from backend
     const [questions, setQuestions] = useState([]);
     const [editing, setEditing] = useState(false);
@@ -17,12 +13,13 @@ const Dashboard = () => {
 
     // Initial fetch of user role from supabase
     useEffect(() => {
+        if (!user?.id) return;
         async function fetchUserRole() {
             // Fetch the user's role from the users table
             const { data, error } = await supabase
                 .from("users")
                 .select("role")
-                .eq("auth0_email", user.email)
+                .eq("auth_id", user.id)
                 .single();
             if (error) {
                 console.error("Failed to fetch user role from Supabase:", error);
@@ -32,24 +29,33 @@ const Dashboard = () => {
             }
         }
         fetchUserRole();
-    }, [user.email]);
-
+    }, [user.id]);
 
     // Role verification
     useEffect(() => {
-        if (isAuthenticated && userRole !== "admin" && userRole !== "researcher") {
+        if (!user && userRole !== "admin" && userRole !== "researcher") {
             setError("Access denied");
         } else {
             setError("");
         }
-    }, [isAuthenticated, userRole]);
+    }, [user, userRole]);
 
     //Fetch questions only if admin
     useEffect(() => {
-        if (isAuthenticated && userRole === "admin") {
-            axios.get("http://localhost:5000/question").then((res) => setQuestions(res.data));
+        if (user && userRole === "admin") {
+            // Fetch questions from Supabase
+            supabase
+                .from("questions")
+                .select("id, question_text, category")
+                .then(({ data, error }) => {
+                    if (error) {
+                        console.error("Failed to fetch questions from Supabase:", error);
+                    } else {
+                        setQuestions(data);
+                    }
+                });
         }
-    }, [isAuthenticated, userRole]);
+    }, [user, userRole]);
 
     const handleEdit = (q) => {
         setEditing(q.id);
@@ -60,17 +66,17 @@ const Dashboard = () => {
     };
 
     const handleDelete = (id) => {
-        axios
-            .delete(`http://localhost:5000/admin/questions/${id}`)
-            .then(() => {
-                setQuestions(questions.filter((q) => q.id !== id));
-                setForm({ question_text: "", category: "" });
-                setEditing(null);
-                console.log("Question deleted successfully");
-            })
-            .catch((err) => {
-                console.error("Error deleting question:", err);
-            });
+        // supabase
+        //     .delete(`http://localhost:5000/admin/questions/${id}`)
+        //     .then(() => {
+        //         setQuestions(questions.filter((q) => q.id !== id));
+        //         setForm({ question_text: "", category: "" });
+        //         setEditing(null);
+        //         console.log("Question deleted successfully");
+        //     })
+        //     .catch((err) => {
+        //         console.error("Error deleting question:", err);
+        //     });
     };
 
     const handleChange = (e) => {
@@ -81,35 +87,40 @@ const Dashboard = () => {
         e.preventDefault();
         if (editing) {
             // Update existing question
-            axios
-                .put(`http://localhost:5000/admin/questions/${editing}`, {
+            supabase
+                .from("questions")
+                .update({
                     question_text: form.question_text,
                     category: form.category,
                 })
-                .then((res) => {
-                    setQuestions(questions.map((q) => (q.id === editing ? res.data : q)));
-                    setForm({ question_text: "", category: "" });
-                    setEditing(false);
-                    console.log("Question updated successfully");
-                })
-                .catch((err) => {
-                    console.error("Error updating question:", err);
+                .eq("id", editing)
+                .then(({ data, error }) => {
+                    if (error) {
+                        console.error("Failed to update question:", error);
+                        setError("Failed to update question");
+                    } else {
+                        setQuestions(
+                            questions.map((q) =>
+                                q.id === editing ? { ...q, ...data[0] } : q
+                            )
+                        );
+                        setEditing(false);
+                        setForm({ question_text: "", category: "" });
+                    }
                 });
         } else {
             // Add new question
-            axios
-                .post("http://localhost:5000/admin/questions", {
-                    question_text: form.question_text,
-                    category: form.category,
-                })
-                .then((res) => {
-                    setQuestions([...questions, res.data]);
-                    setForm({ question_text: "", category: "" });
-                    setEditing(false);
-                    console.log("Question added successfully");
-                })
-                .catch((err) => {
-                    console.error("Error adding question:", err);
+            supabase
+                .from("questions")
+                .insert([{ question_text: form.question_text, category: form.category }])
+                .then(({ data, error }) => {
+                    if (error) {
+                        console.error("Failed to add question:", error);
+                        setError("Failed to add question");
+                    } else {
+                        setQuestions([...questions, data[0]]);
+                        setForm({ question_text: "", category: "" });
+                    }
                 });
         }
     };
@@ -120,12 +131,12 @@ const Dashboard = () => {
             // Fetch all quiz results from Supabase
             let { data: results, error } = await supabase
                 .from("quiz_results")
-                .select("id, userId, answers, categoryScores, createdAt, updatedAt");
+                .select("id, userId, answers, categoryScores, createdAt");
             if (error) throw new Error("Failed to fetch quiz results: " + error.message);
             if (!results || results.length === 0) throw new Error("No quiz results found");
 
             // Convert to CSV (comma-separated, JSON fields properly quoted for Excel)
-            const header = ["id", "userId", "answers", "categoryScores", "createdAt", "updatedAt"];
+            const header = ["id", "userId", "answers", "categoryScores", "createdAt"];
             function escapeForCSV(val) {
                 if (typeof val === "object") val = JSON.stringify(val);
                 if (typeof val === "string") {
@@ -144,7 +155,6 @@ const Dashboard = () => {
                         escapeForCSV(row.answers),
                         escapeForCSV(row.categoryScores),
                         row.createdAt,
-                        row.updatedAt,
                     ].join(",")
                 ),
             ].join("\r\n");
@@ -158,7 +168,7 @@ const Dashboard = () => {
     };
 
     if (error) return <div className="dashboard-error">{error}</div>;
-    if (!isAuthenticated || (userRole !== "admin" && userRole !== "researcher")) return null;
+    if (!user || (userRole !== "admin" && userRole !== "researcher")) return null;
 
     return (
         <div className="outer-dashboard-container">
@@ -270,7 +280,7 @@ const Dashboard = () => {
                                     submitted.
                                 </li>
                                 <li>
-                                    <strong>createdAt / updatedAt</strong>: Timestamps indicating
+                                    <strong>createdAt</strong>: Timestamps indicating
                                     when each quiz result was recorded or last modified.
                                 </li>
                             </ul>

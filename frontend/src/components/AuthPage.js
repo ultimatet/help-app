@@ -3,8 +3,9 @@ import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { useNavigate } from "react-router-dom";
 import supabase from "../lib/supabase";
+import "./AuthPage.css";
 
-export default function AuthPage({ initialView = "sign_in" }) {
+function AuthPage({ initialView = "sign_in" }) {
     const navigate = useNavigate();
 
     // 1️⃣ Listen for SIGNED_IN event and redirect
@@ -27,10 +28,12 @@ export default function AuthPage({ initialView = "sign_in" }) {
             <Auth
                 supabaseClient={supabase}
                 appearance={{ theme: ThemeSupa }}
-                providers={[]} // no OAuth
+                providers={["google"]}
                 theme="dark"
                 view={initialView} // "sign_in" or "sign_up"
             />
         </div>
     );
 }
+
+export default AuthPage;
