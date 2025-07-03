@@ -12,7 +12,7 @@ const Quiz = ({ loading, setLoading, user }) => {
     useEffect(() => {
         // Ensure user is logged in before allowing access to quiz
         if (!user && !loading) {
-            alert("User not authenticated. Redirecting to login.");
+            alert("User must be logged in to acess quiz. Redirecting to login.");
             navigate("/login");
         };
         }, [user, navigate, loading]);
