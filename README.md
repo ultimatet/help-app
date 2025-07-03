@@ -1,4 +1,4 @@
-# Death Literacy Platform
+# Death Literacy Platform aka HELP. app
 
 ## Project Overview
 
@@ -6,14 +6,14 @@ The Death Literacy Platform is an online space designed to improve individuals' 
 
 ## Tech Stack
 - **React** for frontend
-- **Node.js / Express.js** for API
-- **PostgeSQL** for Database management
-- **AuthO** for authentication
+- **Supabase** for Database management and Authentication
+- **Vercel** for web deployment
 
 ## Core Features
 
 - **Death Literacy Assessment**: A questionnaire that helps users understand their current level of death literacy across key dimensions
 - **Personalized Recommendations**: Customized guidance based on assessment results
+- **Downloadable data for researchers**: CSV file export for researchers needing data of the Death literacy assessment 
 - **Educational Resources**: Content covering end-of-life care, grief management, and practical planning
 - **Role-based Access**: Separate interfaces and permissions for general users, researchers, and organizational partners for secure and tailored experiences.
 
@@ -31,15 +31,7 @@ The Death Literacy Platform is an online space designed to improve individuals' 
    npm install
    ```
 3. Run server:
-   
--Frontend:
    ```bash
    npm frontend
    npm start
    ```
--Backend:
-   ```bash
-   npm backend
-   npm start
-   ```
-
